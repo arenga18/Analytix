@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import streamlit as st
 
 
@@ -10,6 +11,7 @@ from models.LogisticRegression import lr_param_selector
 from models.KNearesNeighbors import knn_param_selector
 from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
+from sklearn.model_selection import train_test_split
 
 from models.utils import model_imports
 from utils.functions import img_to_bytes
@@ -35,15 +37,35 @@ def introduction():
 
 
 def dataset_selector():
+    col1, col2 = st.columns((1, 1))
+
+    with col1:
+        st.sidebar.page_link("App.py", label="home", icon=None)
+
+    with col2:
+        st.sidebar.page_link("pages/2_eda.py", label="eda", icon=None)
+        
     dataset_container = st.sidebar.expander("Configure a dataset", True)
     with dataset_container:
-        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs"))
+        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","custom"))
+        
+        if dataset == "custom":
+            df = pd.read_csv('dataset.csv')
+            column_names = df.columns.tolist()
+            selected_feature1 = st.selectbox("Select Features1", column_names, key=1)
+            selected_feature2 = st.selectbox("Select Features2", column_names, key=2)
+            selected_label = st.selectbox("Select Label", column_names)    
+        else:
+            selected_feature1 = None
+            selected_feature2 = None 
+            selected_label = None
+        
         n_samples = st.number_input(
             "Number of samples",
-            min_value=50,
+            min_value=0,
             max_value=1000,
             step=10,
-            value=300,
+            value=100,
         )
 
         train_noise = st.slider(
@@ -66,7 +88,7 @@ def dataset_selector():
         else:
             n_classes = None
 
-    return dataset, n_samples, train_noise, test_noise, n_classes
+    return dataset, n_samples, train_noise, test_noise, n_classes, selected_feature1, selected_feature2, selected_label
 
 
 def model_selector():
@@ -145,6 +167,17 @@ def generate_snippet(
         dataset_import = "from sklearn.datasets import make_blobs"
         train_data_def = f"x_train, y_train = make_blobs(n_samples={n_samples}, clusters=2, noise={train_noise* 47 + 0.57})"
         test_data_def = f"x_test, y_test = make_blobs(n_samples={n_samples // 2}, clusters=2, noise={test_noise* 47 + 0.57})"
+    
+    elif dataset == "custom":
+        dataset_import = "pd.read_csv('dataset.csv')"
+        # X = f"dataset_import[['Feature1', 'Feature2']]"
+        # y = f"dataset_import['Label']"
+
+        # Memisahkan dataset menjadi set pelatihan dan pengujian
+        # f"x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=0.6, test_size=0.4, random_state=42)"
+        
+        train_data_def = f"x_train, y_train = x_train, y_train"
+        test_data_def = f"x_test, y_test = x_test, y_test"
 
     snippet = f"""
     >>> {dataset_import}
