@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-
+from sidebar import sidebar
 
 from models.NaiveBayes import nb_param_selector
 from models.NeuralNetwork import nn_param_selector
@@ -39,22 +39,22 @@ def introduction():
 def dataset_selector():
     col1, col2 = st.columns((1, 1))
 
-    with col1:
-        st.sidebar.page_link("App.py", label="home", icon=None)
-
-    with col2:
-        st.sidebar.page_link("pages/2_eda.py", label="eda", icon=None)
+    for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
+        st.sidebar.page_link(page_link, label=label, icon=icon)
         
     dataset_container = st.sidebar.expander("Configure a dataset", True)
-    with dataset_container:
+    with dataset_container: 
+        
         dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","custom"))
         
         if dataset == "custom":
             df = pd.read_csv('dataset.csv')
             column_names = df.columns.tolist()
+            n_feature = st.number_input("Number of features", 1)
+            
             selected_feature1 = st.selectbox("Select Features1", column_names, key=1)
             selected_feature2 = st.selectbox("Select Features2", column_names, key=2)
-            selected_label = st.selectbox("Select Label", column_names)    
+            selected_label = st.selectbox("Select Target", column_names)    
         else:
             selected_feature1 = None
             selected_feature2 = None 

@@ -3,11 +3,11 @@ import streamlit as st
 import pandas as pd
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
+from sidebar import sidebar
 
 st.set_page_config(page_title = "AnalyTIX", page_icon = "📝", layout="wide")
-st.sidebar.page_link('App.py', label= 'Home', icon = None)
-st.sidebar.page_link('pages/1_Demo.py', label= 'Demo', icon = None)
-st.sidebar.page_link('pages/2_eda.py', label= 'EDA', icon = None)
+for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
+        st.sidebar.page_link(page_link, label=label, icon=icon)
 
 # Muat DataFrame 'df' dari file pickle
 df = pd.read_csv('dataset.csv')

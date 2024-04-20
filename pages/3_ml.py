@@ -18,6 +18,7 @@ from utils.ui import (
     model_selector,
 )
 
+
 st.set_page_config(
     page_title="Analyix", layout="wide", page_icon="./images/flask.png"
 )
