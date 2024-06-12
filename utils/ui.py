@@ -50,14 +50,20 @@ def dataset_selector():
         if dataset == "custom":
             df = pd.read_csv('dataset.csv')
             column_names = df.columns.tolist()
-            n_feature = st.number_input("Number of features", 1)
+            number_feature = st.number_input("Number of features", 2, 2, 2)
             
-            selected_feature1 = st.selectbox("Select Features1", column_names, key=1)
-            selected_feature2 = st.selectbox("Select Features2", column_names, key=2)
-            selected_label = st.selectbox("Select Target", column_names)    
+            select_features = []
+            
+            for i in range(number_feature):
+                n_feature = st.selectbox(f"Select Features {i+1}", column_names,index= i+1,key={i+1})
+                select_features.append(n_feature)
+            
+            selected_label = st.selectbox("Select Target", column_names, index=len(column_names)-1) 
+                
+            train_noise = 0
+            test_noise = 0
         else:
-            selected_feature1 = None
-            selected_feature2 = None 
+            select_features = None
             selected_label = None
         
         n_samples = st.number_input(
@@ -65,30 +71,31 @@ def dataset_selector():
             min_value=0,
             max_value=1000,
             step=10,
-            value=100,
+            value=500,
         )
 
-        train_noise = st.slider(
+        if dataset != "custom":
+            train_noise = st.slider(
             "Set the noise (train data)",
             min_value=0.01,
             max_value=0.2,
             step=0.005,
             value=0.06,
         )
-        test_noise = st.slider(
+            test_noise = st.slider(
             "Set the noise (test data)",
             min_value=0.01,
             max_value=1.0,
             step=0.005,
             value=train_noise,
         )
-
+        
         if dataset == "blobs":
             n_classes = st.number_input("centers", 2, 5, 2, 1)
         else:
             n_classes = None
 
-    return dataset, n_samples, train_noise, test_noise, n_classes, selected_feature1, selected_feature2, selected_label
+    return dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
 
 
 def model_selector():
@@ -170,11 +177,6 @@ def generate_snippet(
     
     elif dataset == "custom":
         dataset_import = "pd.read_csv('dataset.csv')"
-        # X = f"dataset_import[['Feature1', 'Feature2']]"
-        # y = f"dataset_import['Label']"
-
-        # Memisahkan dataset menjadi set pelatihan dan pengujian
-        # f"x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=0.6, test_size=0.4, random_state=42)"
         
         train_data_def = f"x_train, y_train = x_train, y_train"
         test_data_def = f"x_test, y_test = x_test, y_test"

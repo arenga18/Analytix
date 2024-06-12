@@ -20,8 +20,8 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-@st.cache_resource()
-def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, selected_feature1, selected_feature2, selected_label):
+st.cache_resource()
+def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label):
     if dataset == "moons":
         x_train, y_train = make_moons(n_samples=n_samples, noise=train_noise)
         x_test, y_test = make_moons(n_samples=n_samples, noise=test_noise)
@@ -52,7 +52,7 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
     elif dataset == "custom":
         df = pd.read_csv('dataset.csv')
         
-        X = df[[selected_feature1, selected_feature2]].values
+        X = df[select_features].values
         y = df[selected_label].values
         x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=n_samples, test_size=n_samples // 2, random_state=90)
 

@@ -24,10 +24,10 @@ st.set_page_config(
 )
 
 def sidebar_controllers():
-    dataset, n_samples, train_noise, test_noise, n_classes, selected_feature1, selected_feature2, selected_label = dataset_selector()
+    dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label = dataset_selector()
     model_type, model = model_selector()
     x_train, y_train, x_test, y_test = generate_data(
-        dataset, n_samples, train_noise, test_noise, n_classes, selected_feature1, selected_feature2, selected_label
+        dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
     )
     st.sidebar.header("Feature engineering")
     degree = polynomial_degree_selector()
