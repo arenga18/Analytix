@@ -50,7 +50,5 @@ if LOGGED_IN == True:
     else:
         df = pd.DataFrame()
     
-    with open('df.pickle', 'wb') as f:
-        pickle.dump(df, f)
 
    
