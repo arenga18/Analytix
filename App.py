@@ -2,29 +2,17 @@ import streamlit as st
 import os
 import pickle
 import pandas as pd
+from streamlit_option_menu import option_menu
 from streamlit_login_auth_ui.widgets import __login__
+from sidebar import sidebar
 
-
-sidebar = {
-    'page_link': [
-        'App.py',
-        'pages/1_Demo.py',
-        'pages/2_eda.py',
-        'pages/3_ml.py'
-    ],
-    'label': [
-        'Home',
-        'demo',
-        'EDA',
-        'ML'
-    ]
-    }
-
+st.cache_data()
 st.set_page_config(
     page_title="AnalyTIX",
     page_icon="📝",
 )
-
+    
+    
 __login__obj = __login__(
     auth_token="courier_auth_token",
     company_name="Shims",
@@ -39,8 +27,10 @@ __login__obj = __login__(
 LOGGED_IN = __login__obj.build_login_ui()
 
 if LOGGED_IN == True:
-    for page_link, label in zip(sidebar['page_link'], sidebar['label']):
-        st.sidebar.page_link(page_link, label=label, icon=None)
+
+    for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
+        st.sidebar.page_link(page_link, label=label, icon=icon)
+
    
     st.write("# Welcome to AnalyTIX! 👋")
     st.markdown(
@@ -62,8 +52,5 @@ if LOGGED_IN == True:
     else:
         df = pd.DataFrame()
     
-    
-    with open('df.pickle', 'wb') as f:
-        pickle.dump(df, f)
 
    

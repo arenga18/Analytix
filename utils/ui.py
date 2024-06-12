@@ -1,6 +1,7 @@
 import numpy as np
+import pandas as pd
 import streamlit as st
-
+from sidebar import sidebar
 
 from models.NaiveBayes import nb_param_selector
 from models.NeuralNetwork import nn_param_selector
@@ -10,6 +11,7 @@ from models.LogisticRegression import lr_param_selector
 from models.KNearesNeighbors import knn_param_selector
 from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
+from sklearn.model_selection import train_test_split
 
 from models.utils import model_imports
 from utils.functions import img_to_bytes
@@ -35,38 +37,65 @@ def introduction():
 
 
 def dataset_selector():
+    col1, col2 = st.columns((1, 1))
+
+    for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
+        st.sidebar.page_link(page_link, label=label, icon=icon)
+        
     dataset_container = st.sidebar.expander("Configure a dataset", True)
-    with dataset_container:
-        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs"))
+    with dataset_container: 
+        
+        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","custom"))
+        
+        if dataset == "custom":
+            df = pd.read_csv('dataset.csv')
+            column_names = df.columns.tolist()
+            number_feature = st.number_input("Number of features", 2, 2, 2)
+            
+            select_features = []
+            
+            for i in range(number_feature):
+                n_feature = st.selectbox(f"Select Features {i+1}", column_names,index= i+1,key={i+1})
+                select_features.append(n_feature)
+            
+            selected_label = st.selectbox("Select Target", column_names, index=len(column_names)-1) 
+                
+            train_noise = 0
+            test_noise = 0
+        else:
+            select_features = None
+            selected_label = None
+        
         n_samples = st.number_input(
             "Number of samples",
-            min_value=50,
+            min_value=0,
             max_value=1000,
             step=10,
-            value=300,
+            value=500,
         )
 
-        train_noise = st.slider(
+        if dataset != "custom":
+            train_noise = st.slider(
             "Set the noise (train data)",
             min_value=0.01,
             max_value=0.2,
             step=0.005,
             value=0.06,
         )
-        test_noise = st.slider(
+            test_noise = st.slider(
             "Set the noise (test data)",
             min_value=0.01,
             max_value=1.0,
             step=0.005,
             value=train_noise,
         )
-
+        
         if dataset == "blobs":
             n_classes = st.number_input("centers", 2, 5, 2, 1)
         else:
             n_classes = None
 
-    return dataset, n_samples, train_noise, test_noise, n_classes
+    return dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
 
 
 def model_selector():
@@ -145,6 +174,12 @@ def generate_snippet(
         dataset_import = "from sklearn.datasets import make_blobs"
         train_data_def = f"x_train, y_train = make_blobs(n_samples={n_samples}, clusters=2, noise={train_noise* 47 + 0.57})"
         test_data_def = f"x_test, y_test = make_blobs(n_samples={n_samples // 2}, clusters=2, noise={test_noise* 47 + 0.57})"
+    
+    elif dataset == "custom":
+        dataset_import = "pd.read_csv('dataset.csv')"
+        
+        train_data_def = f"x_train, y_train = x_train, y_train"
+        test_data_def = f"x_test, y_test = x_test, y_test"
 
     snippet = f"""
     >>> {dataset_import}

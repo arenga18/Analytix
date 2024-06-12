@@ -4,9 +4,10 @@ import time
 import streamlit as st
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.datasets import make_moons, make_circles, make_blobs
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler 
 
 from plotly.subplots import make_subplots
 import plotly.graph_objs as go
@@ -19,8 +20,8 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-@st.cache(suppress_st_warning=True, allow_output_mutation=True, show_spinner=True)
-def generate_data(dataset, n_samples, train_noise, test_noise, n_classes):
+st.cache_resource()
+def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label):
     if dataset == "moons":
         x_train, y_train = make_moons(n_samples=n_samples, noise=train_noise)
         x_test, y_test = make_moons(n_samples=n_samples, noise=test_noise)
@@ -47,6 +48,13 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes):
         x_train = scaler.fit_transform(x_train)
 
         x_test = scaler.transform(x_test)
+    
+    elif dataset == "custom":
+        df = pd.read_csv('dataset.csv')
+        
+        X = df[select_features].values
+        y = df[selected_label].values
+        x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=n_samples, test_size=n_samples // 2, random_state=90)
 
     return x_train, y_train, x_test, y_test
 
@@ -54,7 +62,7 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes):
 def plot_decision_boundary_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
 ):
-    d = x_train.shape[1]
+    d = x_train.shape[1] 
 
     x_min, x_max = x_train[:, 0].min() - 1, x_train[:, 0].max() + 1
     y_min, y_max = x_train[:, 1].min() - 1, x_train[:, 1].max() + 1

@@ -18,16 +18,16 @@ from utils.ui import (
     model_selector,
 )
 
+
 st.set_page_config(
-    page_title="Playground", layout="wide", page_icon="./images/flask.png"
+    page_title="Analyix", layout="wide", page_icon="./images/flask.png"
 )
 
-
 def sidebar_controllers():
-    dataset, n_samples, train_noise, test_noise, n_classes = dataset_selector()
+    dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label = dataset_selector()
     model_type, model = model_selector()
     x_train, y_train, x_test, y_test = generate_data(
-        dataset, n_samples, train_noise, test_noise, n_classes
+        dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
     )
     st.sidebar.header("Feature engineering")
     degree = polynomial_degree_selector()
@@ -102,7 +102,6 @@ def body(
     snippet_placeholder.code(snippet)
     tips_header_placeholder.header(f"**Tips on the {model_type} 💡 **")
     tips_placeholder.info(model_tips)
-
 
 if __name__ == "__main__":
     (
