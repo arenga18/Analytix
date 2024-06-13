@@ -13,6 +13,7 @@ from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
 from sklearn.model_selection import train_test_split
 
+
 from models.utils import model_imports
 from utils.functions import img_to_bytes
 
@@ -177,7 +178,6 @@ def generate_snippet(
     
     elif dataset == "custom":
         dataset_import = "pd.read_csv('dataset.csv')"
-        
         train_data_def = f"x_train, y_train = x_train, y_train"
         test_data_def = f"x_test, y_test = x_test, y_test"
 
@@ -197,11 +197,34 @@ def generate_snippet(
     >>> train_accuracy = accuracy_score(y_train, y_train_pred)
     >>> test_accuracy = accuracy_score(y_test, y_test_pred)
     """
-    return snippet
+    return snippet    
 
+def display_metrics(metrics):
+    def render_metrics():
+        col1, col2 = st.columns((1,1))
+        
+        with col1:
+            st.write("### Training Metrics")
+            st.write(f"**Accuracy:** {metrics['train_accuracy']}")
+            st.write(f"**Precision:** {metrics['precision_train']}")
+            st.write(f"**Recall:** {metrics['recall_train']}")
+            st.write(f"**F1-Score:** {metrics['train_f1']}")
+
+        with col2:
+            st.write("### Test Metrics")
+            st.write(f"**Accuracy:** {metrics['test_accuracy']}")
+            st.write(f"**Precision:** {metrics['precision_test']}")
+            st.write(f"**Recall:** {metrics['recall_test']}")
+            st.write(f"**F1-Score:** {metrics['test_f1']}")
+    
+    return render_metrics
 
 def polynomial_degree_selector():
     return st.sidebar.number_input("Highest polynomial degree", 1, 10, 1, 1)
+
+def metrics():
+    metrics = st.sidebar.multiselect("What metrics to plot?", ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"))
+    return metrics
 
 
 def footer():

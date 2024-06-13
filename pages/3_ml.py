@@ -1,4 +1,3 @@
-import numpy as np
 import streamlit as st
 from utils.functions import (
     add_polynomial_features,
@@ -7,6 +6,7 @@ from utils.functions import (
     get_model_url,
     plot_decision_boundary_and_metrics,
     train_model,
+    plot_metrics,
 )
 
 from utils.ui import (
@@ -16,7 +16,11 @@ from utils.ui import (
     polynomial_degree_selector,
     introduction,
     model_selector,
+    metrics,
+    display_metrics
 )
+
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay, RocCurveDisplay, PrecisionRecallDisplay
 
 
 st.set_page_config(
@@ -31,6 +35,8 @@ def sidebar_controllers():
     )
     st.sidebar.header("Feature engineering")
     degree = polynomial_degree_selector()
+    metric = metrics()
+    plot_metric = plot_metrics(metric, model, x_train, y_train, x_test, y_test)
     footer()
 
     return (
@@ -46,11 +52,12 @@ def sidebar_controllers():
         train_noise,
         test_noise,
         n_samples,
+        plot_metric
     )
-
+      
 
 def body(
-    x_train, x_test, y_train, y_test, degree, model, model_type, train_noise, test_noise
+    x_train, x_test, y_train, y_test, degree, model, model_type, train_noise, test_noise,plot_metric
 ):
     introduction()
     col1, col2 = st.columns((1, 1))
@@ -61,6 +68,7 @@ def body(
     with col2:
         duration_placeholder = st.empty()
         model_url_placeholder = st.empty()
+        plot_metrics_placeholder = st.empty()
         code_header_placeholder = st.empty()
         snippet_placeholder = st.empty()
         tips_header_placeholder = st.empty()
@@ -73,21 +81,26 @@ def body(
         model,
         train_accuracy,
         train_f1,
+        precision_train, 
+        recall_train,
         test_accuracy,
         test_f1,
+        precision_test,
+        recall_test,
         duration,
     ) = train_model(model, x_train, y_train, x_test, y_test)
 
     metrics = {
         "train_accuracy": train_accuracy,
         "train_f1": train_f1,
+        "precision_train": precision_train,
+        "recall_train": recall_train,
         "test_accuracy": test_accuracy,
         "test_f1": test_f1,
+        "precision_test": precision_test,
+        "recall_test": recall_test,
     }
-
-    snippet = generate_snippet(
-        model, model_type, n_samples, train_noise, test_noise, dataset, degree
-    )
+    
 
     model_tips = get_model_tips(model_type)
 
@@ -96,11 +109,22 @@ def body(
     )
 
     plot_placeholder.plotly_chart(fig, True)
+    
     duration_placeholder.warning(f"Training took {duration:.3f} seconds")
+    
     model_url_placeholder.markdown(model_url)
-    code_header_placeholder.header("**Retrain the same model in Python**")
-    snippet_placeholder.code(snippet)
+    
+    with plot_metrics_placeholder.container():
+        plot_metric
+        
+    code_header_placeholder.header("**Result**")
+    
+    displayed_metrics = display_metrics(metrics)
+    with snippet_placeholder.container():
+        displayed_metrics()
+        
     tips_header_placeholder.header(f"**Tips on the {model_type} 💡 **")
+    
     tips_placeholder.info(model_tips)
 
 if __name__ == "__main__":
@@ -117,6 +141,7 @@ if __name__ == "__main__":
         train_noise,
         test_noise,
         n_samples,
+        plot_metric
     ) = sidebar_controllers()
     body(
         x_train,
@@ -128,4 +153,5 @@ if __name__ == "__main__":
         model_type,
         train_noise,
         test_noise,
+        plot_metric,
     )
