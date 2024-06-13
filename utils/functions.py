@@ -1,17 +1,17 @@
 from pathlib import Path
+from matplotlib import pyplot as plt
+from numpy.core.numeric import True_
 import base64
 import time
 import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay, RocCurveDisplay, PrecisionRecallDisplay
 from sklearn.datasets import make_moons, make_circles, make_blobs
 from sklearn.preprocessing import StandardScaler 
-
 from plotly.subplots import make_subplots
 import plotly.graph_objs as go
-
 from models.utils import model_infos, model_urls
 
 
@@ -51,13 +51,86 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
     
     elif dataset == "custom":
         df = pd.read_csv('dataset.csv')
-        
         X = df[select_features].values
         y = df[selected_label].values
         x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=n_samples, test_size=n_samples // 2, random_state=90)
 
     return x_train, y_train, x_test, y_test
 
+def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
+    # Fit model to training data
+    model.fit(x_train, y_train)
+    
+    if "Confusion Matrix" in metrics_list:
+        st.subheader("Confusion Matrix")
+        
+        # Calculate confusion matrix
+        cm = confusion_matrix(y_test, model.predict(x_test))
+        
+        # Display confusion matrix
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Class 0", "Class 1"])
+        disp.plot()
+        st.pyplot()
+        
+    if "ROC Curve" in metrics_list:
+        st.subheader("ROC Curve")
+        
+        # Calculate ROC curve
+        fpr, tpr, _ = roc_curve(y_test, model.predict_proba(x_test)[:, 1])
+        
+        # Plot ROC curve
+        plt.figure(figsize=(8, 6))
+        plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve')
+        plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC Curve')
+        plt.legend(loc="lower right")
+        st.pyplot()
+        
+    if "Precision-Recall Curve" in metrics_list:
+        st.subheader("Precision-Recall Curve")
+        
+        # Plot Precision-Recall curve
+        plot_precision_recall_curve(model, x_test, y_test)
+        st.pyplot()
+    if "Confusion Matrix" in metrics_list:
+        st.subheader("Confusion Matrix")
+        
+        # Calculate confusion matrix
+        cm = confusion_matrix(y_test, model.predict(x_test))
+        
+        # Display confusion matrix
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Class 0", "Class 1"])
+        disp.plot()
+        st.pyplot()
+        
+    if "ROC Curve" in metrics_list:
+        st.subheader("ROC Curve")
+        
+        # Calculate ROC curve
+        fpr, tpr, _ = roc_curve(y_test, model.predict_proba(x_test)[:, 1])
+        
+        # Plot ROC curve
+        plt.figure(figsize=(8, 6))
+        plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve')
+        plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC Curve')
+        plt.legend(loc="lower right")
+        st.pyplot()
+        
+    if "Precision-Recall Curve" in metrics_list:
+        st.subheader("Precision-Recall Curve")
+        
+        # Plot Precision-Recall curve
+        plot_precision_recall_curve(model, x_test, y_test)
+        st.pyplot()
 
 def plot_decision_boundary_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
@@ -150,11 +223,11 @@ def plot_decision_boundary_and_metrics(
     fig.add_trace(
         go.Indicator(
             mode="gauge+number+delta",
-            value=metrics["test_f1"],
+            value=metrics["recall_test"],
             title={"text": f"F1 score (test)"},
             domain={"x": [0, 1], "y": [0, 1]},
             gauge={"axis": {"range": [0, 1]}},
-            delta={"reference": metrics["train_f1"]},
+            delta={"reference": metrics["recall_train"]},
         ),
         row=2,
         col=2,
@@ -176,11 +249,15 @@ def train_model(model, x_train, y_train, x_test, y_test):
 
     train_accuracy = np.round(accuracy_score(y_train, y_train_pred), 3)
     train_f1 = np.round(f1_score(y_train, y_train_pred, average="weighted"), 3)
+    precision_train = np.round(precision_score(y_train, y_train_pred, average='weighted'), 3)
+    recall_train = np.round(recall_score(y_train, y_train_pred, average='weighted'), 3)
 
     test_accuracy = np.round(accuracy_score(y_test, y_test_pred), 3)
     test_f1 = np.round(f1_score(y_test, y_test_pred, average="weighted"), 3)
+    precision_test = np.round(precision_score(y_test, y_test_pred, average='weighted'), 3)
+    recall_test = np.round(recall_score(y_test, y_test_pred, average='weighted'), 3)
 
-    return model, train_accuracy, train_f1, test_accuracy, test_f1, duration
+    return model, train_accuracy, train_f1,precision_train, recall_train,  test_accuracy, test_f1, precision_test, recall_test, duration
 
 
 def img_to_bytes(img_path):
