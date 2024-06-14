@@ -1,14 +1,15 @@
 from pathlib import Path
 from matplotlib import pyplot as plt
-from numpy.core.numeric import True_
 import base64
 import time
 import streamlit as st
 import pandas as pd
+import seaborn as sns
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay, RocCurveDisplay, PrecisionRecallDisplay
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay
 from sklearn.datasets import make_moons, make_circles, make_blobs
+from matplotlib.colors import LinearSegmentedColormap
 from sklearn.preprocessing import StandardScaler 
 from plotly.subplots import make_subplots
 import plotly.graph_objs as go
@@ -58,79 +59,98 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
     return x_train, y_train, x_test, y_test
 
 def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
-    # Fit model to training data
+            # Fit model to training data
     model.fit(x_train, y_train)
-    
+            
     if "Confusion Matrix" in metrics_list:
-        st.subheader("Confusion Matrix")
-        
-        # Calculate confusion matrix
-        cm = confusion_matrix(y_test, model.predict(x_test))
-        
-        # Display confusion matrix
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Class 0", "Class 1"])
-        disp.plot()
-        st.pyplot()
-        
+        # Membuat prediksi
+        y_pred = model.predict(x_test)
+        cm = confusion_matrix(y_test, y_pred)
+
+        # Menampilkan confusion matrix tanpa indikator di sebelah kanan
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        disp.plot(ax=ax)  # Nonaktifkan colorbar
+
+        # Ubah warna background dan warna teks
+        ax.set_facecolor('#0e1117')
+        fig.patch.set_facecolor('#0e1117')
+        plt.title('Confusion Matrix', color='white')
+        plt.xlabel('Predicted label', color='white')
+        plt.ylabel('True label', color='white')
+
+        # Ubah warna ticks dan label ticks
+        ax.tick_params(axis='x', colors='white')
+        ax.tick_params(axis='y', colors='white')
+        ax.xaxis.label.set_color('white')
+        ax.yaxis.label.set_color('white')
+
+        # Ubah warna teks di dalam kotak confusion matrix
+        for text in disp.text_.ravel():
+            text.set_color('white')
+
+        # Buat custom colormap
+        colors = ['#008000', '#ff6347']
+        cmap_name = 'custom_cmap'
+        custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
+
+        # Ubah warna kotak confusion matrix
+        disp.im_.set_cmap(custom_cmap)
+
+        st.pyplot(fig)
+
     if "ROC Curve" in metrics_list:
-        st.subheader("ROC Curve")
-        
         # Calculate ROC curve
-        fpr, tpr, _ = roc_curve(y_test, model.predict_proba(x_test)[:, 1])
-        
+        y_prob = model.predict_proba(x_test)[:, 1]
+        fpr, tpr, _ = roc_curve(y_test, y_prob)
+
         # Plot ROC curve
-        plt.figure(figsize=(8, 6))
-        plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve')
+        plt.figure(figsize=(6, 4))
+        plt.plot(fpr, tpr, color='#ff6347', lw=2, label='ROC curve')
         plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
+        plt.xlabel('False Positive Rate', color='white')
+        plt.ylabel('True Positive Rate', color='white')
         plt.title('ROC Curve')
         plt.legend(loc="lower right")
-        st.pyplot()
+        
+        # Ubah warna ticks pada axis menjadi putih
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+
+        # Ubah warna latar belakang
+        plt.gca().set_facecolor('white')
+        plt.gcf().patch.set_facecolor('#0e1117')
+
+        st.pyplot(plt.gcf())
         
     if "Precision-Recall Curve" in metrics_list:
-        st.subheader("Precision-Recall Curve")
+        # Calculate Precision-Recall curve
+        y_prob = model.predict_proba(x_test)[:, 1]
+        precision, recall, _ = precision_recall_curve(y_test, y_prob)
         
         # Plot Precision-Recall curve
-        plot_precision_recall_curve(model, x_test, y_test)
-        st.pyplot()
-    if "Confusion Matrix" in metrics_list:
-        st.subheader("Confusion Matrix")
-        
-        # Calculate confusion matrix
-        cm = confusion_matrix(y_test, model.predict(x_test))
-        
-        # Display confusion matrix
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Class 0", "Class 1"])
-        disp.plot()
-        st.pyplot()
-        
-    if "ROC Curve" in metrics_list:
-        st.subheader("ROC Curve")
-        
-        # Calculate ROC curve
-        fpr, tpr, _ = roc_curve(y_test, model.predict_proba(x_test)[:, 1])
-        
-        # Plot ROC curve
-        plt.figure(figsize=(8, 6))
-        plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve')
+        plt.figure(figsize=(6, 4))
+        plt.plot(recall, precision, color='#ff6347', lw=2, label='Precision-Recall curve')
         plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('ROC Curve')
-        plt.legend(loc="lower right")
-        st.pyplot()
+        plt.xlabel('Recall', color='white')
+        plt.ylabel('Precision', color='white')
+        plt.title('Precision-Recall Curve')
+        plt.legend(loc="lower left")
         
-    if "Precision-Recall Curve" in metrics_list:
-        st.subheader("Precision-Recall Curve")
+         # Ubah warna ticks pada axis menjadi putih
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+
+        # Ubah warna latar belakang
+        plt.gca().set_facecolor('white')
+        plt.gcf().patch.set_facecolor('#0e1117')
+
         
-        # Plot Precision-Recall curve
-        plot_precision_recall_curve(model, x_test, y_test)
-        st.pyplot()
+        st.pyplot(plt.gcf())
+        
 
 def plot_decision_boundary_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
@@ -223,11 +243,11 @@ def plot_decision_boundary_and_metrics(
     fig.add_trace(
         go.Indicator(
             mode="gauge+number+delta",
-            value=metrics["recall_test"],
+            value=metrics["test_f1"],
             title={"text": f"F1 score (test)"},
             domain={"x": [0, 1], "y": [0, 1]},
             gauge={"axis": {"range": [0, 1]}},
-            delta={"reference": metrics["recall_train"]},
+            delta={"reference": metrics["train_f1"]},
         ),
         row=2,
         col=2,
