@@ -204,18 +204,18 @@ def display_metrics(metrics):
         col1, col2 = st.columns((1,1))
         
         with col1:
-            st.write("### Training Metrics")
-            st.write(f"**Accuracy:** {metrics['train_accuracy']}")
-            st.write(f"**Precision:** {metrics['precision_train']}")
-            st.write(f"**Recall:** {metrics['recall_train']}")
-            st.write(f"**F1-Score:** {metrics['train_f1']}")
+            st.write("### (Training)")
+            st.write(f"Accuracy: {metrics['train_accuracy']}")
+            st.write(f"Precision: {metrics['precision_train']}")
+            st.write(f"Recall: {metrics['recall_train']}")
+            st.write(f"F1-Score: {metrics['train_f1']}")
 
         with col2:
-            st.write("### Test Metrics")
-            st.write(f"**Accuracy:** {metrics['test_accuracy']}")
-            st.write(f"**Precision:** {metrics['precision_test']}")
-            st.write(f"**Recall:** {metrics['recall_test']}")
-            st.write(f"**F1-Score:** {metrics['test_f1']}")
+            st.write("### (Test)")
+            st.write(f"Accuracy: {metrics['test_accuracy']}")
+            st.write(f"Precision: {metrics['precision_test']}")
+            st.write(f"Recall: {metrics['recall_test']}")
+            st.write(f"F1-Score: {metrics['test_f1']}")
     
     return render_metrics
 
@@ -225,14 +225,3 @@ def polynomial_degree_selector():
 def metrics():
     metrics = st.sidebar.multiselect("What metrics to plot?", ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"))
     return metrics
-
-
-def footer():
-    st.sidebar.markdown("---")
-    st.sidebar.markdown(
-        """
-        [<img src='data:image/png;base64,{}' class='img-fluid' width=25 height=25>](https://github.com/ahmedbesbes/playground) <small> Playground 0.1.0 | April 2021</small>""".format(
-            img_to_bytes("./images/github.png")
-        ),
-        unsafe_allow_html=True,
-    )

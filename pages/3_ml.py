@@ -11,16 +11,12 @@ from utils.functions import (
 
 from utils.ui import (
     dataset_selector,
-    footer,
-    generate_snippet,
     polynomial_degree_selector,
     introduction,
     model_selector,
     metrics,
     display_metrics
 )
-
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay, RocCurveDisplay, PrecisionRecallDisplay
 
 
 st.set_page_config(
@@ -36,8 +32,6 @@ def sidebar_controllers():
     st.sidebar.header("Feature engineering")
     degree = polynomial_degree_selector()
     metric = metrics()
-    plot_metric = plot_metrics(metric, model, x_train, y_train, x_test, y_test)
-    footer()
 
     return (
         dataset,
@@ -52,12 +46,12 @@ def sidebar_controllers():
         train_noise,
         test_noise,
         n_samples,
-        plot_metric
+        metric
     )
       
 
 def body(
-    x_train, x_test, y_train, y_test, degree, model, model_type, train_noise, test_noise,plot_metric
+    x_train, x_test, y_train, y_test, degree, model, model_type, train_noise, test_noise,metric
 ):
     introduction()
     col1, col2 = st.columns((1, 1))
@@ -110,14 +104,14 @@ def body(
 
     plot_placeholder.plotly_chart(fig, True)
     
-    duration_placeholder.warning(f"Training took {duration:.3f} seconds")
+    # duration_placeholder.warning(f"Training took {duration:.3f} seconds")
     
-    model_url_placeholder.markdown(model_url)
+    # model_url_placeholder.markdown(model_url)
     
-    with plot_metrics_placeholder.container():
-        plot_metric
+    with model_url_placeholder.container():
+        plot_metrics(metric, model,  x_train, y_train, x_test, y_test)
         
-    code_header_placeholder.header("**Result**")
+    code_header_placeholder.header(f"**Result for {model_type}**")
     
     displayed_metrics = display_metrics(metrics)
     with snippet_placeholder.container():
@@ -141,7 +135,7 @@ if __name__ == "__main__":
         train_noise,
         test_noise,
         n_samples,
-        plot_metric
+        metric
     ) = sidebar_controllers()
     body(
         x_train,
@@ -153,5 +147,5 @@ if __name__ == "__main__":
         model_type,
         train_noise,
         test_noise,
-        plot_metric,
+        metric,
     )
