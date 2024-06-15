@@ -11,8 +11,7 @@ st.set_page_config(
     page_title="AnalyTIX",
     page_icon="📝",
 )
-    
-    
+        
 __login__obj = __login__(
     auth_token="courier_auth_token",
     company_name="Shims",

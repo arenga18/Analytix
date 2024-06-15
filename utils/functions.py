@@ -60,6 +60,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
     model.fit(x_train, y_train)
             
     if "Confusion Matrix" in metrics_list:
+        
         # Make Y Prediction
         y_pred = model.predict(x_test)
         cm = confusion_matrix(y_test, y_pred)
@@ -98,7 +99,6 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         st.pyplot(fig)
 
     if "ROC Curve" in metrics_list:
-        
         # Calculate ROC curve
         y_prob = model.predict_proba(x_test)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, y_prob)
@@ -111,7 +111,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate', color='white')
         plt.ylabel('True Positive Rate', color='white')
-        plt.title('ROC Curve')
+        plt.title('ROC Curve', color='white')
         plt.legend(loc="lower right")
         
         # Change color ticks and label ticks
@@ -125,7 +125,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         st.pyplot(plt.gcf())
         
     if "Precision-Recall Curve" in metrics_list:
-        
+        st.subheader("Precision-Recall Curve")
         # Calculate Precision-Recall curve
         y_prob = model.predict_proba(x_test)[:, 1]
         precision, recall, _ = precision_recall_curve(y_test, y_prob)
@@ -136,7 +136,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
         plt.xlabel('Recall', color='white')
         plt.ylabel('Precision', color='white')
-        plt.title('Precision-Recall Curve')
+        plt.title('Precision-Recall Curve', color='white')
         plt.legend(loc="lower left")
         
          # Change color ticks and label ticks
