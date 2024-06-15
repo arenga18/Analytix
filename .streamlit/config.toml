@@ -1,4 +1,5 @@
 [client]
+showErrorDetails = false
 showSidebarNavigation = false
 
 [theme]
@@ -6,3 +7,9 @@ base="dark"
 
 [deprecation]
 showPyplotGlobalUse = false
+
+[general]
+caching = false
+
+
+
