@@ -11,12 +11,7 @@ from models.LogisticRegression import lr_param_selector
 from models.KNearesNeighbors import knn_param_selector
 from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
-from sklearn.model_selection import train_test_split
-
-
 from models.utils import model_imports
-from utils.functions import img_to_bytes
-
 
 def introduction():
     st.title("**Welcome to playground 🧪**")
@@ -38,8 +33,6 @@ def introduction():
 
 
 def dataset_selector():
-    col1, col2 = st.columns((1, 1))
-
     for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
         
@@ -60,7 +53,8 @@ def dataset_selector():
                 select_features.append(n_feature)
             
             selected_label = st.selectbox("Select Target", column_names, index=len(column_names)-1) 
-                
+            
+            # Set Noise to 0 
             train_noise = 0
             test_noise = 0
         else:
@@ -74,22 +68,23 @@ def dataset_selector():
             step=10,
             value=500,
         )
-
-        if dataset != "custom":
+        
+        if(dataset != "custom"):
             train_noise = st.slider(
-            "Set the noise (train data)",
-            min_value=0.01,
-            max_value=0.2,
-            step=0.005,
-            value=0.06,
-        )
+                "Set the noise (train data)",
+                min_value=0.01,
+                max_value=0.2,
+                step=0.005,
+                value=0.06,
+            )
+            
             test_noise = st.slider(
-            "Set the noise (test data)",
-            min_value=0.01,
-            max_value=1.0,
-            step=0.005,
-            value=train_noise,
-        )
+                "Set the noise (test data)",
+                min_value=0.01,
+                max_value=1.0,
+                step=0.005,
+                value=train_noise,
+            )
         
         if dataset == "blobs":
             n_classes = st.number_input("centers", 2, 5, 2, 1)
@@ -141,64 +136,7 @@ def model_selector():
             model = gb_param_selector()
 
     return model_type, model
-
-
-def generate_snippet(
-    model, model_type, n_samples, train_noise, test_noise, dataset, degree
-):
-    train_noise = np.round(train_noise, 3)
-    test_noise = np.round(test_noise, 3)
-
-    model_text_rep = repr(model)
-    model_import = model_imports[model_type]
-
-    if degree > 1:
-        feature_engineering = f"""
-    >>> for d in range(2, {degree+1}):
-    >>>     x_train = np.concatenate((x_train, x_train[:, 0] ** d, x_train[:, 1] ** d))
-    >>>     x_test= np.concatenate((x_test, x_test[:, 0] ** d, x_test[:, 1] ** d))
-    """
-
-    if dataset == "moons":
-        dataset_import = "from sklearn.datasets import make_moons"
-        train_data_def = (
-            f"x_train, y_train = make_moons(n_samples={n_samples}, noise={train_noise})"
-        )
-        test_data_def = f"x_test, y_test = make_moons(n_samples={n_samples // 2}, noise={test_noise})"
-
-    elif dataset == "circles":
-        dataset_import = "from sklearn.datasets import make_circles"
-        train_data_def = f"x_train, y_train = make_circles(n_samples={n_samples}, noise={train_noise})"
-        test_data_def = f"x_test, y_test = make_circles(n_samples={n_samples // 2}, noise={test_noise})"
-
-    elif dataset == "blobs":
-        dataset_import = "from sklearn.datasets import make_blobs"
-        train_data_def = f"x_train, y_train = make_blobs(n_samples={n_samples}, clusters=2, noise={train_noise* 47 + 0.57})"
-        test_data_def = f"x_test, y_test = make_blobs(n_samples={n_samples // 2}, clusters=2, noise={test_noise* 47 + 0.57})"
-    
-    elif dataset == "custom":
-        dataset_import = "pd.read_csv('dataset.csv')"
-        train_data_def = f"x_train, y_train = x_train, y_train"
-        test_data_def = f"x_test, y_test = x_test, y_test"
-
-    snippet = f"""
-    >>> {dataset_import}
-    >>> {model_import}
-    >>> from sklearn.metrics import accuracy_score, f1_score
-
-    >>> {train_data_def}
-    >>> {test_data_def}
-    {feature_engineering if degree > 1 else ''}    
-    >>> model = {model_text_rep}
-    >>> model.fit(x_train, y_train)
-    
-    >>> y_train_pred = model.predict(x_train)
-    >>> y_test_pred = model.predict(x_test)
-    >>> train_accuracy = accuracy_score(y_train, y_train_pred)
-    >>> test_accuracy = accuracy_score(y_test, y_test_pred)
-    """
-    return snippet    
-
+  
 def display_metrics(metrics):
     def render_metrics():
         col1, col2 = st.columns((1,1))
