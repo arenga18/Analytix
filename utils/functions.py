@@ -125,7 +125,6 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         st.pyplot(plt.gcf())
         
     if "Precision-Recall Curve" in metrics_list:
-        st.subheader("Precision-Recall Curve")
         # Calculate Precision-Recall curve
         y_prob = model.predict_proba(x_test)[:, 1]
         precision, recall, _ = precision_recall_curve(y_test, y_prob)
@@ -139,7 +138,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.title('Precision-Recall Curve', color='white')
         plt.legend(loc="lower left")
         
-         # Change color ticks and label ticks
+        # Change color ticks and label ticks
         plt.tick_params(axis='x', colors='white')
         plt.tick_params(axis='y', colors='white')
 
@@ -148,8 +147,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.gcf().patch.set_facecolor('#0e1117')
 
         st.pyplot(plt.gcf())
-        
-
+                
 def plot_decision_boundary_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
 ):

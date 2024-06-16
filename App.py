@@ -1,12 +1,10 @@
 import streamlit as st
 import os
-import pickle
 import pandas as pd
 from streamlit_option_menu import option_menu
 from streamlit_login_auth_ui.widgets import __login__
 from sidebar import sidebar
 
-st.cache_data()
 st.set_page_config(
     page_title="AnalyTIX",
     page_icon="📝",
