@@ -14,7 +14,7 @@ df = pd.read_csv('dataset.csv')
     
 if not df.empty:
     st.title('Exploratory Data Analysis Automation')
-    profile_report = df.profile_report(config_file="pages/config_py.yml")
+    profile_report = df.profile_report(config_file="pages/config_py.yml", interactions=None)
     st_profile_report(profile_report)
 else:
     st.warning('Please upload the dataset first')   
