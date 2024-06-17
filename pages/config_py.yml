@@ -134,11 +134,11 @@ plot:
   scatter_threshold: 1000
 
   correlation:
-    cmap: "RdBu"
+    cmap: "RdBu_r"
     bad: "#000000"
 
   missing:
-    cmap: "RdBu"
+    cmap: "RdBu_r"
     # Force labels when there are > 50 variables
     # https://github.com/ResidentMario/missingno/issues/93#issuecomment-513322615
     force_labels: true
@@ -206,11 +206,11 @@ html:
 
   # Styling options for the HTML report
   style:
-    theme: "cosmo"
+    theme: "flatly"
     logo: ""
     primary_colors:
-      - "#377eb8"
-      - "#e41a1c"
-      - "#4daf4a"
+      - "#ff6347"
+      - "#ff6347"
+      - "#ff6347"
 
   full_width: false
