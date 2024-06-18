@@ -56,6 +56,7 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
 
 def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
     
+    
     # Fit model to training data
     model.fit(x_train, y_train)
             

@@ -46,8 +46,8 @@ def dataset_selector():
             
             select_features = st.multiselect(
             "Select Features", 
-            column_names,
-            default=column_names[:]
+            column_names[:-1],
+            default=column_names[:2]
             )
     
             selected_label = st.selectbox(
