@@ -3,6 +3,7 @@ from utils.functions import (
     add_polynomial_features,
     generate_data,
     get_model_tips,
+    plot_scatter_and_metrics,
     plot_decision_boundary_and_metrics,
     train_model,
     plot_metrics,
@@ -92,9 +93,10 @@ def body(
     }
     
     # Decision Boundary Placeholder
-    fig = plot_decision_boundary_and_metrics(
-        model, x_train, y_train, x_test, y_test, metrics
-    )
+    # fig = plot_decision_boundary_and_metrics(
+    #     model, x_train, y_train, x_test, y_test, metrics
+    # )
+    fig = plot_scatter_and_metrics(model, x_train, y_train, x_test, y_test, metrics)
     plot_placeholder.plotly_chart(fig, True)
 
     # Metric Plot

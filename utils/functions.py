@@ -170,6 +170,7 @@ def plot_decision_boundary_and_metrics(
     Z = model.predict(np.concatenate([v.reshape(-1, 1) for v in aux], axis=1))
 
     Z = Z.reshape(xx.shape)
+    st.write(xx)
 
     # Make fig plot Decision Boundary
     fig = make_subplots(
@@ -223,6 +224,91 @@ def plot_decision_boundary_and_metrics(
     ).update_xaxes(range=[x_min, x_max], title="x1").update_yaxes(
         range=[y_min, y_max], title="x2"
     )
+
+    fig.add_trace(
+        go.Indicator(
+            mode="gauge+number+delta",
+            value=metrics["test_accuracy"],
+            title={"text": f"Accuracy (test)"},
+            domain={"x": [0, 1], "y": [0, 1]},
+            gauge={"axis": {"range": [0, 1]}},
+            delta={"reference": metrics["train_accuracy"]},
+        ),
+        row=2,
+        col=1,
+    )
+
+    fig.add_trace(
+        go.Indicator(
+            mode="gauge+number+delta",
+            value=metrics["test_f1"],
+            title={"text": f"F1 score (test)"},
+            domain={"x": [0, 1], "y": [0, 1]},
+            gauge={"axis": {"range": [0, 1]}},
+            delta={"reference": metrics["train_f1"]},
+        ),
+        row=2,
+        col=2,
+    )
+
+    fig.update_layout(
+        height=700,
+    )
+
+    return fig
+
+
+def plot_scatter_and_metrics(
+    model, x_train, y_train, x_test, y_test, metrics
+):
+    x_min, x_max = x_train[:, 0].min() - 1, x_train[:, 0].max() + 1
+    y_min, y_max = x_train[:, 1].min() - 1, x_train[:, 1].max() + 1
+
+    st.write(x_train)
+
+    # Make fig plot Scatter Plot
+    fig = make_subplots(
+        rows=2,
+        cols=2,
+        specs=[[{"colspan": 2}, None], [{"type": "indicator"}, {"type": "indicator"}]],
+        subplot_titles=("Scatter Plot", None, None),
+        row_heights=[0.7, 0.30],
+    )
+
+    train_data = go.Scatter(
+        x=x_train[:, 0],
+        y=x_train[:, 1],
+        name="train data",
+        mode="markers",
+        showlegend=True,
+        marker=dict(
+            size=10,
+            color=y_train,
+            colorscale=["tomato", "green"],
+            line=dict(color="black", width=2),
+        ),
+    )
+
+    test_data = go.Scatter(
+        x=x_test[:, 0],
+        y=x_test[:, 1],
+        name="test data",
+        mode="markers",
+        showlegend=True,
+        marker_symbol="cross",
+        marker=dict(
+            size=10,
+            color=y_test,
+            colorscale=["tomato", "green"],
+            line=dict(color="black", width=2),
+        ),
+    )
+
+    fig.add_trace(train_data, row=1, col=1)
+    fig.add_trace(test_data, row=1, col=1)
+    
+    fig.update_xaxes(range=[x_min, x_max], title="x1", row=1, col=1)
+    fig.update_yaxes(range=[y_min, y_max], title="x2", row=1, col=1)
 
     fig.add_trace(
         go.Indicator(
