@@ -11,10 +11,9 @@ from models.LogisticRegression import lr_param_selector
 from models.KNearesNeighbors import knn_param_selector
 from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
-from models.utils import model_imports
 
 def introduction():
-    st.title("**Welcome to playground 🧪**")
+    st.title("**Welcome to Machine Learning Test🧪**")
     st.subheader(
         """
         This is a place where you can get familiar with machine learning models directly from your browser
@@ -44,15 +43,18 @@ def dataset_selector():
         if dataset == "custom":
             df = pd.read_csv('dataset.csv')
             column_names = df.columns.tolist()
-            number_feature = st.number_input("Number of features", 2, 2, 2)
             
-            select_features = []
-            
-            for i in range(number_feature):
-                n_feature = st.selectbox(f"Select Features {i+1}", column_names,index= i+1,key={i+1})
-                select_features.append(n_feature)
-            
-            selected_label = st.selectbox("Select Target", column_names, index=len(column_names)-1) 
+            select_features = st.multiselect(
+            "Select Features", 
+            column_names,
+            default=column_names[:]
+            )
+    
+            selected_label = st.selectbox(
+                "Select Target (Y variable)", 
+                column_names, 
+                index=len(column_names) - 1
+            )
             
             # Set Noise to 0 
             train_noise = 0
