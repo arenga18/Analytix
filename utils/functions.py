@@ -56,48 +56,8 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
 
 def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
     
-    
     # Fit model to training data
     model.fit(x_train, y_train)
-            
-    if "Confusion Matrix" in metrics_list:
-        
-        # Make Y Prediction
-        y_pred = model.predict(x_test)
-        cm = confusion_matrix(y_test, y_pred)
-
-        # Display Confusion Matrix
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-
-        fig, ax = plt.subplots(figsize=(8, 8))
-        disp.plot(ax=ax)
-
-        # Konfiguration
-        ax.set_facecolor('#0e1117')
-        fig.patch.set_facecolor('#0e1117')
-        plt.title('Confusion Matrix', color='white')
-        plt.xlabel('Predicted label', color='white')
-        plt.ylabel('True label', color='white')
-
-        # Change color ticks and label ticks
-        ax.tick_params(axis='x', colors='white')
-        ax.tick_params(axis='y', colors='white')
-        ax.xaxis.label.set_color('white')
-        ax.yaxis.label.set_color('white')
-
-        # Change color text inside box
-        for text in disp.text_.ravel():
-            text.set_color('white')
-
-        # Custom colormap
-        colors = ['#008000', '#ff6347']
-        cmap_name = 'custom_cmap'
-        custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
-
-        # Color Box Confusion Matrix
-        disp.im_.set_cmap(custom_cmap)
-
-        st.pyplot(fig)
 
     if "ROC Curve" in metrics_list:
         # Calculate ROC curve
@@ -259,13 +219,51 @@ def plot_decision_boundary_and_metrics(
     return fig
 
 
+def plot_confusion_matrix(model, x_train, y_train, x_test, y_test):
+    # Make Y Prediction
+        y_pred = model.predict(x_test)
+        cm = confusion_matrix(y_test, y_pred)
+
+        # Display Confusion Matrix
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        disp.plot(ax=ax)
+
+        # Konfiguration
+        ax.set_facecolor('#0e1117')
+        fig.patch.set_facecolor('#0e1117')
+        plt.title('Confusion Matrix', color='white')
+        plt.xlabel('Predicted label', color='white')
+        plt.ylabel('True label', color='white')
+
+        # Change color ticks and label ticks
+        ax.tick_params(axis='x', colors='white')
+        ax.tick_params(axis='y', colors='white')
+        ax.xaxis.label.set_color('white')
+        ax.yaxis.label.set_color('white')
+
+        # Change color text inside box
+        for text in disp.text_.ravel():
+            text.set_color('white')
+
+        # Custom colormap
+        colors = ['#008000', '#ff6347']
+        cmap_name = 'custom_cmap'
+        custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
+
+        # Color Box Confusion Matrix
+        disp.im_.set_cmap(custom_cmap)
+
+        st.pyplot(fig)
+
 def plot_scatter_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
 ):
     x_min, x_max = x_train[:, 0].min() - 1, x_train[:, 0].max() + 1
     y_min, y_max = x_train[:, 1].min() - 1, x_train[:, 1].max() + 1
 
-    st.write(x_train)
+    # st.write(x_train)
 
     # Make fig plot Scatter Plot
     fig = make_subplots(
@@ -338,7 +336,7 @@ def plot_scatter_and_metrics(
     )
 
     fig.update_layout(
-        height=700,
+        height=650,
     )
 
     return fig

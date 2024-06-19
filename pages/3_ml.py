@@ -5,6 +5,7 @@ from utils.functions import (
     get_model_tips,
     plot_scatter_and_metrics,
     plot_decision_boundary_and_metrics,
+    plot_confusion_matrix,
     train_model,
     plot_metrics,
 )
@@ -96,8 +97,10 @@ def body(
     # fig = plot_decision_boundary_and_metrics(
     #     model, x_train, y_train, x_test, y_test, metrics
     # )
-    fig = plot_scatter_and_metrics(model, x_train, y_train, x_test, y_test, metrics)
-    plot_placeholder.plotly_chart(fig, True)
+    # fig = plot_scatter_and_metrics(model, x_train, y_train, x_test, y_test, metrics)
+    
+    with plot_placeholder.container():
+        plot_confusion_matrix(model, x_train, y_train, x_test, y_test)
 
     # Metric Plot
     with metric_placeholder.container():
