@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import pandas as pd
-from streamlit_option_menu import option_menu
 from streamlit_login_auth_ui.widgets import __login__
 from sidebar import sidebar
 

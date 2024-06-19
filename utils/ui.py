@@ -45,7 +45,7 @@ def dataset_selector():
             column_names = df.columns.tolist()
             
             select_features = st.multiselect(
-            "Select Features", 
+            "Select Features (X variables)", 
             column_names[:-1],
             default=column_names[:2]
             )
@@ -163,5 +163,5 @@ def polynomial_degree_selector():
     return st.sidebar.number_input("Highest polynomial degree", 1, 10, 1, 1)
 
 def metrics():
-    metrics = st.sidebar.multiselect("What metrics to plot?", ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"))
+    metrics = st.sidebar.multiselect("What metrics to plot?", ("ROC Curve", "Precision-Recall Curve")) 
     return metrics
