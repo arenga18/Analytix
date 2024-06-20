@@ -34,7 +34,7 @@ if LOGGED_IN == True:
         
         Let's get started!
         """
-        )
+    )
     
     file = st.file_uploader('Upload Dataset Here')
     if file:
@@ -44,7 +44,11 @@ if LOGGED_IN == True:
     if os.path.exists('dataset.csv'):
         df = pd.read_csv('dataset.csv', index_col=None)
         st.dataframe(df)
+
+        if st.button("Delete Dataset"):
+            os.remove('dataset.csv')
+            st.info("Dataset has been deleted.")
+            st.experimental_rerun()
     else:
         df = pd.DataFrame()
-
    

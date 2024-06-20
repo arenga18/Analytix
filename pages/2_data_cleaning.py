@@ -42,8 +42,8 @@ if os.path.exists(file_path):
             st.write("No duplicate data found.")
 
     with col2:
-        st.subheader("Data Null")
-        # Menampilkan data yang mengandung nilai null
+        st.subheader("Null Data")
+
         null_data = df[df.isnull().any(axis=1)]
         num_null = null_data.shape[0]
         percent_null = (num_null / df.shape[0]) * 100
