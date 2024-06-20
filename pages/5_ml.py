@@ -110,7 +110,10 @@ def body(
         plot_metrics(metric, model,  x_train, y_train, x_test, y_test)
         
     # Result Placeholder
-    result_header_placeholder.header(f"**Result for {model_type}**")
+    result_header_placeholder.header(f"""
+        **Result for {model_type}**
+        -----
+                """)
     displayed_metrics = display_metrics(metrics)
     with result_placeholder.container():
         displayed_metrics()
