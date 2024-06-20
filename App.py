@@ -27,7 +27,6 @@ if LOGGED_IN == True:
     for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
 
-   
     st.write("# Welcome to AnalyTIX! 👋")
     st.markdown(
         """
