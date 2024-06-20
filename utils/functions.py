@@ -4,7 +4,7 @@ import base64
 import time
 import streamlit as st
 import pandas as pd
-import seaborn as sns
+import os
 import numpy as np
 import plotly.graph_objs as go
 
@@ -21,7 +21,7 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 st.cache_resource()
-def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label):
+def generate_data(dataset, n_samples, train_split, test_split, train_noise, test_noise, n_classes, select_features, selected_label):
     if dataset == "moons":
         x_train, y_train = make_moons(n_samples=n_samples, noise=train_noise)
         x_test, y_test = make_moons(n_samples=n_samples, noise=test_noise)
@@ -47,10 +47,15 @@ def generate_data(dataset, n_samples, train_noise, test_noise, n_classes, select
         x_train = scaler.fit_transform(x_train)
         x_test = scaler.transform(x_test)
     elif dataset == "custom":
-        df = pd.read_csv('dataset.csv')
-        X = df[select_features].values
-        y = df[selected_label].values
-        x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=n_samples, test_size=n_samples // 2, random_state=90)
+        file_path = 'dataset.csv'
+        if os.path.exists(file_path):
+            df = pd.read_csv(file_path)
+            X = df[select_features].values
+            y = df[selected_label].values
+            x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=train_split,test_size=test_split, random_state=90)
+        else:
+            x_train = y_train = x_test = y_test = None
+            st.warning('Please upload the dataset first.')
 
     return x_train, y_train, x_test, y_test
 

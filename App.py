@@ -30,7 +30,7 @@ if LOGGED_IN == True:
     st.write("# Welcome to AnalyTIX! 👋")
     st.markdown(
         """
-        **AnalyTIX** adalah sebuah aplikasi yang diracang untuk para Data Scientist yang ingin melakukan uji & analisa Machine Learning.
+        **AnalyTIX** is an application designed for data scientists aiming to perform thorough testing and analysis in machine learning. It offers a user-friendly interface with a wide array of tools and features.
         
         Let's get started!
         """
@@ -46,6 +46,5 @@ if LOGGED_IN == True:
         st.dataframe(df)
     else:
         df = pd.DataFrame()
-    
 
    
