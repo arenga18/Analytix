@@ -89,6 +89,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.gcf().patch.set_facecolor('#0e1117')
 
         st.pyplot(plt.gcf())
+        st.markdown("""-----""")
         
     if "Precision-Recall Curve" in metrics_list:
         # Calculate Precision-Recall curve
@@ -113,6 +114,7 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
         plt.gcf().patch.set_facecolor('#0e1117')
 
         st.pyplot(plt.gcf())
+        st.markdown("""-----""")
                 
 def plot_decision_boundary_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics

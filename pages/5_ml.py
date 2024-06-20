@@ -63,8 +63,8 @@ def body(
         tips_placeholder = st.empty()
 
     with col2:
-        metric_placeholder = st.empty()
         result_header_placeholder = st.empty()
+        metric_placeholder = st.empty()
         result_placeholder = st.empty()
 
     x_train, x_test = add_polynomial_features(x_train, x_test, degree)
@@ -104,16 +104,17 @@ def body(
     # Confusion Matrix Placeholder
     with plot_placeholder.container():
         plot_confusion_matrix(model, x_train, y_train, x_test, y_test)
-
-    # Metric Plot
-    with metric_placeholder.container():
-        plot_metrics(metric, model,  x_train, y_train, x_test, y_test)
         
     # Result Placeholder
     result_header_placeholder.header(f"""
         **Result for {model_type}**
         -----
                 """)
+    
+    # Metric Plot
+    with metric_placeholder.container():
+        plot_metrics(metric, model,  x_train, y_train, x_test, y_test)
+    
     displayed_metrics = display_metrics(metrics)
     with result_placeholder.container():
         displayed_metrics()
