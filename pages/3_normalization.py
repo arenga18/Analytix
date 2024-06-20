@@ -3,38 +3,38 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sidebar import sidebar
+import os
 
-st.set_page_config(page_title = "AnalyTIX", page_icon = "📝", layout="wide")
+st.set_page_config(page_title="AnalyTIX", page_icon="📝", layout="wide")
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
-        
+
 # Membaca dataset
 file_path = 'dataset.csv'
-df = pd.read_csv(file_path)
 
-# Judul aplikasi
-st.title("Normalization Data")
+if os.path.exists(file_path):
+    df = pd.read_csv(file_path)
 
-# Pilihan Normalisasi di dalam body utama
-st.subheader("Pilihan Normalisasi")
-scaler_option = st.radio("Pilih Scaler:", ("MinMaxScaler", "StandardScaler"))
+    st.title("Normalization Data")
 
-if st.button("Normalisasi"):
-    if scaler_option == "MinMaxScaler":
-        scaler = MinMaxScaler()
-    elif scaler_option == "StandardScaler":
-        scaler = StandardScaler()
+    st.subheader("Normalization Options")
+    scaler_option = st.radio("Select Scaler:", ("MinMaxScaler", "StandardScaler"))
 
-    # Normalisasi data
-    scaled_data = scaler.fit_transform(df.select_dtypes(include=np.number))
-    df[df.select_dtypes(include=np.number).columns] = scaled_data
-    
-    # Menyimpan hasil normalisasi ke file CSV
-    df.to_csv(file_path, index=False)
-    
-    # Refresh halaman untuk memperbarui DataFrame
-    st.experimental_rerun()
+    if st.button("Normalization"):
+        if scaler_option == "MinMaxScaler":
+            scaler = MinMaxScaler()
+        elif scaler_option == "StandardScaler":
+            scaler = StandardScaler()
 
-# Menampilkan dataframe setelah normalisasi
-st.subheader("DataFrame setelah Normalisasi")
-st.write(df)
+        scaled_data = scaler.fit_transform(df.select_dtypes(include=np.number))
+        df[df.select_dtypes(include=np.number).columns] = scaled_data
+
+        df.to_csv(file_path, index=False)
+
+        # refresh page
+        st.experimental_rerun()
+        
+    st.subheader("DataFrame after Normalization")
+    st.write(df)
+else:
+    st.warning('Please upload the dataset first.')

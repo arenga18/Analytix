@@ -24,10 +24,10 @@ st.set_page_config(
 )
 
 def sidebar_controllers():
-    dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label = dataset_selector()
+    dataset, n_samples, train_split, test_split,train_noise, test_noise, n_classes, select_features, selected_label = dataset_selector()
     model_type, model = model_selector()
     x_train, y_train, x_test, y_test = generate_data(
-        dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
+        dataset, n_samples, train_split, test_split,train_noise, test_noise, n_classes, select_features, selected_label
     )
     st.sidebar.header("Feature engineering")
     degree = polynomial_degree_selector()
@@ -43,6 +43,8 @@ def sidebar_controllers():
         x_test,
         y_test,
         degree,
+        train_split, 
+        test_split,
         train_noise,
         test_noise,
         n_samples,
@@ -50,7 +52,7 @@ def sidebar_controllers():
     )
       
 def body(
-    x_train, x_test, y_train, y_test, degree, model, model_type, train_noise, test_noise,metric
+    x_train, x_test, y_train, y_test, degree, model, model_type, metric
 ):
     introduction()
     col1, col2 = st.columns((1, 1))
@@ -99,6 +101,7 @@ def body(
     # )
     # fig = plot_scatter_and_metrics(model, x_train, y_train, x_test, y_test, metrics)
     
+    # Confusion Matrix Placeholder
     with plot_placeholder.container():
         plot_confusion_matrix(model, x_train, y_train, x_test, y_test)
 
@@ -129,6 +132,8 @@ if __name__ == "__main__":
         x_test,
         y_test,
         degree,
+        train_split, 
+        test_split,
         train_noise,
         test_noise,
         n_samples,
@@ -142,7 +147,5 @@ if __name__ == "__main__":
         degree,
         model,
         model_type,
-        train_noise,
-        test_noise,
         metric,
     )

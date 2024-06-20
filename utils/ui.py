@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import os
 from sidebar import sidebar
 
 from models.NaiveBayes import nb_param_selector
@@ -41,35 +42,49 @@ def dataset_selector():
         dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","custom"))
         
         if dataset == "custom":
-            df = pd.read_csv('dataset.csv')
-            column_names = df.columns.tolist()
+            file_path = 'dataset.csv'
+            if os.path.exists(file_path):
+                df = pd.read_csv(file_path)
+                column_names = df.columns.tolist()
+
+                select_features = st.multiselect(
+                    "Select Features (X variables)",
+                    column_names[:-1],
+                    default=column_names[:2]
+                )
+
+                selected_label = st.selectbox(
+                    "Select Target (Y variable)",
+                    column_names,
+                    index=len(column_names) - 1
+                )
+
+                train_split = st.slider(
+                "Set(train data)",
+                min_value=0.1,
+                max_value=0.9,
+                step=0.1,
+                value=0.8,
+                )
+                
+                default_test_split = 1.0 - train_split
             
-            select_features = st.multiselect(
-            "Select Features (X variables)", 
-            column_names[:-1],
-            default=column_names[:2]
-            )
-    
-            selected_label = st.selectbox(
-                "Select Target (Y variable)", 
-                column_names, 
-                index=len(column_names) - 1
-            )
-            
-            # Set Noise to 0 
-            train_noise = 0
-            test_noise = 0
+                test_split = st.slider(
+                    "Set(test data)",
+                    min_value=0.1,
+                    max_value=0.9,
+                    step=0.1,
+                    value=default_test_split,
+                )
+                # Set Noise to 0 
+                train_noise = 0
+                test_noise = 0
+                n_samples = None
+            else:
+                st.warning('Please upload the dataset first.')
         else:
             select_features = None
             selected_label = None
-        
-        n_samples = st.number_input(
-            "Number of samples",
-            min_value=0,
-            max_value=1000,
-            step=10,
-            value=500,
-        )
         
         if(dataset != "custom"):
             train_noise = st.slider(
@@ -87,13 +102,23 @@ def dataset_selector():
                 step=0.005,
                 value=train_noise,
             )
+            
+            n_samples = st.number_input(
+                "Number of samples",
+                min_value=0,
+                max_value=10000,
+                step=50,
+                value=500,
+            )
+            train_split = None
+            test_split = None
         
         if dataset == "blobs":
             n_classes = st.number_input("centers", 2, 5, 2, 1)
         else:
             n_classes = None
 
-    return dataset, n_samples, train_noise, test_noise, n_classes, select_features, selected_label
+    return dataset, n_samples, train_split, test_split,train_noise, test_noise, n_classes, select_features, selected_label
 
 
 def model_selector():
