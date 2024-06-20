@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from ydata_profiling import ProfileReport
-from streamlit_pandas_profiling import st_profile_report
+from streamlit_ydata_profiling import st_profile_report
 from sidebar import sidebar
 import os
 
@@ -9,10 +9,9 @@ st.set_page_config(page_title="AnalyTIX", page_icon="📝", layout="wide")
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
 
-# Cek apakah file dataset.csv ada
 file_path = 'dataset.csv'
 if os.path.exists(file_path):
-    # Muat DataFrame 'df' dari file CSV
+    
     df = pd.read_csv(file_path)
     
     if not df.empty:
