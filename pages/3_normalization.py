@@ -12,6 +12,14 @@ for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sideba
 # Membaca dataset
 file_path = 'dataset.csv'
 
+import streamlit as st
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import os
+
+file_path = 'dataset.csv'
+
 if os.path.exists(file_path):
     df = pd.read_csv(file_path)
 
@@ -23,17 +31,22 @@ if os.path.exists(file_path):
     if st.button("Normalization"):
         if scaler_option == "MinMaxScaler":
             scaler = MinMaxScaler()
+            # Memilih kolom numerik untuk dinormalisasi
+            numeric_columns = df.select_dtypes(include=np.number).columns
+            scaled_data = scaler.fit_transform(df[numeric_columns])
+            df[numeric_columns] = scaled_data
         elif scaler_option == "StandardScaler":
             scaler = StandardScaler()
-
-        scaled_data = scaler.fit_transform(df.select_dtypes(include=np.number))
-        df[df.select_dtypes(include=np.number).columns] = scaled_data
+            # Memilih kolom numerik untuk dinormalisasi kecuali kolom terakhir
+            numeric_columns = df.select_dtypes(include=np.number).columns[:-1]
+            scaled_data = scaler.fit_transform(df[numeric_columns])
+            df[numeric_columns] = scaled_data
 
         df.to_csv(file_path, index=False)
 
-        # refresh page
+        # Refresh page
         st.experimental_rerun()
-        
+
     st.subheader("DataFrame after Normalization")
     st.write(df)
 else:
