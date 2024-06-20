@@ -9,7 +9,7 @@ import numpy as np
 import plotly.graph_objs as go
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, roc_curve, auc, precision_recall_curve, average_precision_score,ConfusionMatrixDisplay
 from sklearn.datasets import make_moons, make_circles, make_blobs
 from matplotlib.colors import LinearSegmentedColormap
 from sklearn.preprocessing import StandardScaler 
@@ -65,13 +65,14 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
     model.fit(x_train, y_train)
 
     if "ROC Curve" in metrics_list:
-        # Calculate ROC curve
+        # Calculate ROC curve and AUC
         y_prob = model.predict_proba(x_test)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, y_prob)
+        roc_auc = auc(fpr, tpr)
 
         # Plot ROC curve
         plt.figure(figsize=(6, 4))
-        plt.plot(fpr, tpr, color='#ff6347', lw=2, label='ROC curve')
+        plt.plot(fpr, tpr, color='#ff6347', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
         plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
@@ -90,15 +91,16 @@ def plot_metrics(metrics_list, model, x_train, y_train, x_test, y_test):
 
         st.pyplot(plt.gcf())
         st.markdown("""-----""")
-        
+
     if "Precision-Recall Curve" in metrics_list:
-        # Calculate Precision-Recall curve
+        # Calculate Precision-Recall curve and Average Precision
         y_prob = model.predict_proba(x_test)[:, 1]
         precision, recall, _ = precision_recall_curve(y_test, y_prob)
+        avg_precision = average_precision_score(y_test, y_prob)
         
         # Plot Precision-Recall curve
         plt.figure(figsize=(6, 4))
-        plt.plot(recall, precision, color='#ff6347', lw=2, label='Precision-Recall curve')
+        plt.plot(recall, precision, color='#ff6347', lw=2, label=f'Precision-Recall curve (AP = {avg_precision:.2f})')
         plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
         plt.xlabel('Recall', color='white')
         plt.ylabel('Precision', color='white')
