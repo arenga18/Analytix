@@ -166,22 +166,28 @@ def model_selector():
   
 def display_metrics(metrics):
     def render_metrics():
-        col1, col2 = st.columns((1,1))
+        col1, col2 = st.columns(2)
         
         with col1:
-            st.write("### (Training)")
-            st.write(f"Accuracy: {metrics['train_accuracy']}")
-            st.write(f"Precision: {metrics['precision_train']}")
-            st.write(f"Recall: {metrics['recall_train']}")
-            st.write(f"F1-Score: {metrics['train_f1']}")
+            st.write("Training result")
+            train_metrics = {
+                "Accuracy": metrics['train_accuracy'],
+                "Precision": metrics['precision_train'],
+                "Recall": metrics['recall_train'],
+                "F1-Score": metrics['train_f1']
+            }
+            st.table(pd.DataFrame(train_metrics.items(), columns=["Metric", "Value"]).set_index("Metric"))
 
         with col2:
-            st.write("### (Test)")
-            st.write(f"Accuracy: {metrics['test_accuracy']}")
-            st.write(f"Precision: {metrics['precision_test']}")
-            st.write(f"Recall: {metrics['recall_test']}")
-            st.write(f"F1-Score: {metrics['test_f1']}")
-    
+            st.write("Test result")
+            test_metrics = {
+                "Accuracy": metrics['test_accuracy'],
+                "Precision": metrics['precision_test'],
+                "Recall": metrics['recall_test'],
+                "F1-Score": metrics['test_f1']
+            }
+            st.table(pd.DataFrame(test_metrics.items(), columns=["Metric", "Value"]).set_index("Metric"))
+
     return render_metrics
 
 def polynomial_degree_selector():
