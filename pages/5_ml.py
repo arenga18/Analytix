@@ -20,7 +20,8 @@ from utils.ui import (
 )
 
 st.set_page_config(
-    page_title="Analyix", layout="wide", page_icon="./images/flask.png"
+    page_title="AnalyTIX",
+    page_icon="images/logo.png", layout="wide"
 )
 
 def sidebar_controllers():
