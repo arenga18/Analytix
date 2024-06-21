@@ -17,7 +17,9 @@ st.markdown("""
         .st-emotion-cache-d0k6px{
             display:none;
         }
-        
+        .st-emotion-cache-13ln4jf{
+            max-width: 55rem !important;
+        }
     </style>
     """,
     unsafe_allow_html=True
@@ -47,11 +49,17 @@ if LOGGED_IN == True:
         .st-emotion-cache-d0k6px{
             display:none;
         }
-        .st-emotion-cache-1ab9dzl{
-            display:none;
-        }
         .st-emotion-cache-k7vsyb h1{
             padding-top: 0 !important;
+        }
+        .st-emotion-cache-13ln4jf{
+            max-width: 50rem !important;
+        }
+        .st-emotion-cache-1jzia57 h1{
+            padding-top: 0 !important;
+        }
+        .st-emotion-cache-1vxmjmh, .st-emotion-cache-1vxmjmh{
+            display:none;
         }
         
     </style>
