@@ -263,6 +263,11 @@ def plot_confusion_matrix(model, x_train, y_train, x_test, y_test):
 
         # Color Box Confusion Matrix
         disp.im_.set_cmap(custom_cmap)
+        
+        # Change color of colorbar labels
+        colorbar = disp.im_.colorbar
+        colorbar.ax.yaxis.set_tick_params(color='white')
+        plt.setp(colorbar.ax.yaxis.get_ticklabels(), color='white')
 
         st.pyplot(fig)
 

@@ -5,7 +5,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sidebar import sidebar
 import os
 
-st.set_page_config(page_title="AnalyTIX", page_icon="📝", layout="wide")
+st.set_page_config(
+    page_title="AnalyTIX",
+    page_icon="images/logo.png", layout="wide"
+)
+
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
 
