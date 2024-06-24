@@ -70,7 +70,7 @@ if LOGGED_IN == True:
     for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
 
-    st.title("Welcome to AnalyTIX! 👋")
+    st.title("WELCOME TO ANALYTIX! 👋")
     st.write(
         """
         **AnalytiX** is an application designed for data scientists aiming to perform thorough testing and analysis in machine learning. It offers a user-friendly interface with a wide array of tools and features.
