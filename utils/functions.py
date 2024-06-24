@@ -367,7 +367,7 @@ def train_model(model, x_train, y_train, x_test, y_test):
     train_accuracy = np.round(accuracy_score(y_train, y_train_pred), 3)
     train_f1 = np.round(f1_score(y_train, y_train_pred, average="weighted"), 3)
     precision_train = np.round(precision_score(y_train, y_train_pred, average='weighted'), 3)
-    recall_train = np.round(recall_score(y_train, y_train_pred, average='weigh ted'), 3)
+    recall_train = np.round(recall_score(y_train, y_train_pred, average='weighted'), 3)
 
     # Test Result
     test_accuracy = np.round(accuracy_score(y_test, y_test_pred), 3)
