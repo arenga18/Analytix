@@ -20,6 +20,7 @@ if os.path.exists(file_path):
 
     # Judul aplikasi
     st.title("Data Cleaning")
+    st.write("-----")
 
     # Membagi halaman menjadi dua kolom
     col1, col2 = st.columns((1, 1), gap="large")
