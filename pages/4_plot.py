@@ -21,6 +21,7 @@ if os.path.exists(file_path):
 
     # App title
     st.title("Scatter Plot Visualization")
+    st.write("------")
 
     col1, col2 = st.columns((1, 3), gap="large")
 

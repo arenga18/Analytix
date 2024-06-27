@@ -25,7 +25,7 @@ def introduction():
         """
     - 🗂️ Choose a dataset
     - ⚙️ Pick a model and set its hyper-parameters
-    - 📉 Train it and check its performance metrics and decision boundary on train and test data
+    - 📉 Train it and check its confusion metrics and other metrics result
     - 🩺 Diagnose possible overitting and experiment with other settings
     -----
     """
@@ -75,6 +75,7 @@ def dataset_selector():
                     max_value=0.9,
                     step=0.1,
                     value=default_test_split,
+                    disabled=True
                 )
                 # Set Noise to 0 
                 train_noise = 0

@@ -9,7 +9,7 @@ import numpy as np
 import plotly.graph_objs as go
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, roc_curve, auc, precision_recall_curve, average_precision_score,ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, roc_curve, auc, precision_recall_curve, average_precision_score,ConfusionMatrixDisplay, mean_squared_error
 from sklearn.datasets import make_moons, make_circles, make_blobs
 from matplotlib.colors import LinearSegmentedColormap
 from sklearn.preprocessing import StandardScaler 
@@ -228,49 +228,80 @@ def plot_decision_boundary_and_metrics(
     return fig
 
 
-def plot_confusion_matrix(model, x_train, y_train, x_test, y_test):
+def plot_confusion_matrix(model, x_train, y_train, x_test, y_test, metrics):
     # Make Y Prediction
-        y_pred = model.predict(x_test)
-        cm = confusion_matrix(y_test, y_pred)
+    y_pred = model.predict(x_test)
+    cm = confusion_matrix(y_test, y_pred)
+    
+    # Display Confusion Matrix
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+    fig, ax = plt.subplots(figsize=(8, 8))
+    disp.plot(ax=ax)
+    
+    # Konfiguration
+    ax.set_facecolor('#0e1117')
+    fig.patch.set_facecolor('#0e1117')
+    plt.title('Confusion Matrix', color='white', fontsize=16, pad=30)
+    plt.xlabel('Predicted label', color='white',fontsize=16)
+    plt.ylabel('True label', color='white',fontsize=16)
+    # Change color ticks and label ticks
+    ax.tick_params(axis='x', colors='white')
+    ax.tick_params(axis='y', colors='white')
+    ax.xaxis.label.set_color('white')
+    ax.yaxis.label.set_color('white')
+    # Change color text inside box
+    for text in disp.text_.ravel():
+        text.set_color('white')
+    # Custom colormap
+    colors = ['#008000', '#ff6347']
+    cmap_name = 'custom_cmap'
+    custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
+    # Color Box Confusion Matrix
+    disp.im_.set_cmap(custom_cmap)
+    
+    # Change color of colorbar labels
+    colorbar = disp.im_.colorbar
+    colorbar.ax.yaxis.set_tick_params(color='white')
+    plt.setp(colorbar.ax.yaxis.get_ticklabels(), color='white')
 
-        # Display Confusion Matrix
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+    st.pyplot(fig)
+    st.markdown("------")
+    
+def gauge_indicator(metrics):
+    # Create gauge indicators
+    fig_gauges = go.Figure()
 
-        fig, ax = plt.subplots(figsize=(8, 8))
-        disp.plot(ax=ax)
+    fig_gauges.add_trace(
+        go.Indicator(
+            mode="gauge+number+delta",
+            value=metrics["mse_test"],
+            title={"text": f"MSE (test)"},
+            gauge={"axis": {"range": [0, 1]}},
+            delta={"reference": metrics["mse_train"]},
+            domain={'row': 0, 'column': 0}
+        ))
 
-        # Konfiguration
-        ax.set_facecolor('#0e1117')
-        fig.patch.set_facecolor('#0e1117')
-        plt.title('Confusion Matrix', color='white')
-        plt.xlabel('Predicted label', color='white')
-        plt.ylabel('True label', color='white')
+    fig_gauges.add_trace(
+        go.Indicator(
+            mode="gauge+number+delta",
+            value=metrics["rmse_test"],
+            title={"text": f"RMSE (test)"},
+            gauge={"axis": {"range": [0, 1]}},
+            delta={"reference": metrics["rmse_train"]},
+            domain={'row': 0, 'column': 1}
+        )
+    )
 
-        # Change color ticks and label ticks
-        ax.tick_params(axis='x', colors='white')
-        ax.tick_params(axis='y', colors='white')
-        ax.xaxis.label.set_color('white')
-        ax.yaxis.label.set_color('white')
+    fig_gauges.update_layout(
+        autosize=True,
+        height = 300,
+        grid={'rows': 1, 'columns': 2, 'pattern': "independent"},
+        template={'data': {'indicator': [{'title': {'text': "Gauge Indicator"}}]}},
+        title={'text': 'Error Evaluation', 'x': 0.5, 'y': 0.95, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 20}}
+    )
 
-        # Change color text inside box
-        for text in disp.text_.ravel():
-            text.set_color('white')
-
-        # Custom colormap
-        colors = ['#008000', '#ff6347']
-        cmap_name = 'custom_cmap'
-        custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
-
-        # Color Box Confusion Matrix
-        disp.im_.set_cmap(custom_cmap)
-        
-        # Change color of colorbar labels
-        colorbar = disp.im_.colorbar
-        colorbar.ax.yaxis.set_tick_params(color='white')
-        plt.setp(colorbar.ax.yaxis.get_ticklabels(), color='white')
-
-        st.pyplot(fig)
-
+    st.plotly_chart(fig_gauges, use_container_width=True)
+    
 def plot_scatter_and_metrics(
     model, x_train, y_train, x_test, y_test, metrics
 ):
@@ -368,6 +399,10 @@ def train_model(model, x_train, y_train, x_test, y_test):
     train_f1 = np.round(f1_score(y_train, y_train_pred, average="weighted"), 3)
     precision_train = np.round(precision_score(y_train, y_train_pred, average='weighted'), 3)
     recall_train = np.round(recall_score(y_train, y_train_pred, average='weighted'), 3)
+    
+    # Train MSE and RMSE
+    mse_train = mean_squared_error(y_train, y_train_pred)
+    rmse_train = np.sqrt(mse_train)
 
     # Test Result
     test_accuracy = np.round(accuracy_score(y_test, y_test_pred), 3)
@@ -375,7 +410,11 @@ def train_model(model, x_train, y_train, x_test, y_test):
     precision_test = np.round(precision_score(y_test, y_test_pred, average='weighted'), 3)
     recall_test = np.round(recall_score(y_test, y_test_pred, average='weighted'), 3)
 
-    return model, train_accuracy, train_f1,precision_train, recall_train,  test_accuracy, test_f1, precision_test, recall_test, duration
+    # Test MSE and RMSE
+    mse_test = mean_squared_error(y_test, y_test_pred)
+    rmse_test = np.sqrt(mse_test)
+
+    return (model, train_accuracy, train_f1, precision_train, recall_train, mse_train, rmse_train,test_accuracy, test_f1, precision_test, recall_test, mse_test, rmse_test, duration)
 
 
 def img_to_bytes(img_path):

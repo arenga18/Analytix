@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.functions import (
     add_polynomial_features,
+    gauge_indicator,
     generate_data,
     get_model_tips,
     plot_scatter_and_metrics,
@@ -56,10 +57,11 @@ def body(
     x_train, x_test, y_train, y_test, degree, model, model_type, metric
 ):
     introduction()
-    col1, col2 = st.columns((1, 1))
+    col1, col2 = st.columns((1, 1), gap="large")
 
     with col1:
         plot_placeholder = st.empty()
+        gauge_placeholder = st.empty()
         tips_header_placeholder = st.empty()
         tips_placeholder = st.empty()
 
@@ -72,16 +74,7 @@ def body(
 
     # Render Metric Result
     (
-        model, 
-        train_accuracy, 
-        train_f1,
-        precision_train, 
-        recall_train,  
-        test_accuracy, 
-        test_f1, 
-        precision_test, 
-        recall_test, 
-        duration
+        model, train_accuracy, train_f1, precision_train, recall_train, mse_train, rmse_train,test_accuracy, test_f1, precision_test, recall_test, mse_test, rmse_test, duration
     ) = train_model(model, x_train, y_train, x_test, y_test)
 
     # Make object of metric
@@ -90,10 +83,14 @@ def body(
         "train_f1": train_f1,
         "precision_train": precision_train,
         "recall_train": recall_train,
+        "mse_train": mse_train,
+        "rmse_train": rmse_train,
         "test_accuracy": test_accuracy,
         "test_f1": test_f1,
         "precision_test": precision_test,
         "recall_test": recall_test,
+        "mse_test": mse_test,
+        "rmse_test": rmse_test
     }
     
     # Decision Boundary Placeholder
@@ -104,13 +101,21 @@ def body(
     
     # Confusion Matrix Placeholder
     with plot_placeholder.container():
-        plot_confusion_matrix(model, x_train, y_train, x_test, y_test)
+        plot_confusion_matrix(model, x_train, y_train, x_test, y_test, metrics)
+        
+    # Gauge Indicator Placeholder():
+    with gauge_placeholder.container():
+        gauge_indicator(metrics)
         
     # Result Placeholder
     result_header_placeholder.header(f"""
         **Result for {model_type}**
-        -----
-                """)
+        -----""")
+    
+    # Tips Placeholder
+    tips_header_placeholder.header(f"**Tips on the {model_type} 💡 **")
+    model_tips = get_model_tips(model_type)
+    tips_placeholder.info(model_tips)
     
     # Metric Plot
     with metric_placeholder.container():
@@ -120,11 +125,6 @@ def body(
     with result_placeholder.container():
         displayed_metrics()
         
-    # Tips Placeholder
-    tips_header_placeholder.header(f"**Tips on the {model_type} 💡 **")
-    model_tips = get_model_tips(model_type)
-    tips_placeholder.info(model_tips)
-
 # Render data
 if __name__ == "__main__":
     (

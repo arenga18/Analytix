@@ -28,6 +28,7 @@ if os.path.exists(file_path):
     df = pd.read_csv(file_path)
 
     st.title("Normalization Data")
+    st.write("-----")
 
     st.subheader("Normalization Options")
     scaler_option = st.radio("Select Scaler:", ("MinMaxScaler", "StandardScaler"))
