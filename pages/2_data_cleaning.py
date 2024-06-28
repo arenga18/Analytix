@@ -48,12 +48,18 @@ if os.path.exists(file_path):
     with col2:
         st.subheader("Null Data")
 
+        # Check Null Data
         null_data = df[df.isnull().any(axis=1)]
         num_null = null_data.shape[0]
         percent_null = (num_null / df.shape[0]) * 100
 
-        st.write(f"Number of null data: {num_null}")
-        st.write(f"Percentage of null data: {percent_null:.2f}%")
+        # Check Missing Data
+        missing_data = df.isnull().sum()
+        total_missing = missing_data.sum()
+        percent_missing = (total_missing / df.size) * 100
+
+        st.write(f"Number of missing data: {total_missing}")
+        st.write(f"Percentage of missing data: {percent_missing:.2f}%")
         st.write(null_data)
 
         if not null_data.empty:
