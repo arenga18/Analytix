@@ -46,7 +46,7 @@ if os.path.exists(file_path):
             st.write("No duplicate data found.")
 
     with col2:
-        st.subheader("Null Data")
+        st.subheader("Missing Data")
 
         # Check Null Data
         null_data = df[df.isnull().any(axis=1)]
