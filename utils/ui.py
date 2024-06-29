@@ -10,7 +10,6 @@ from models.RandomForet import rf_param_selector
 from models.DecisionTree import dt_param_selector
 from models.LogisticRegression import lr_param_selector
 from models.KNearesNeighbors import knn_param_selector
-from models.SVC import svc_param_selector
 from models.GradientBoosting import gb_param_selector
 
 def introduction():
@@ -134,8 +133,7 @@ def model_selector():
                 "Gradient Boosting",
                 "Neural Network",
                 "K Nearest Neighbors",
-                "Gaussian Naive Bayes",
-                "SVC",
+                "Gaussian Naive Bayes"
             ),
         )
 
@@ -156,9 +154,6 @@ def model_selector():
 
         elif model_type == "Gaussian Naive Bayes":
             model = nb_param_selector()
-
-        elif model_type == "SVC":
-            model = svc_param_selector()
 
         elif model_type == "Gradient Boosting":
             model = gb_param_selector()

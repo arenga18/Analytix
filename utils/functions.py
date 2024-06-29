@@ -275,26 +275,41 @@ def gauge_indicator(metrics):
         go.Indicator(
             mode="gauge+number+delta",
             value=metrics["mse_test"],
-            title={"text": f"MSE (test)"},
-            gauge={"axis": {"range": [0, 1]}},
-            delta={"reference": metrics["mse_train"]},
+            title={"text": "MSE (test)"},
+            gauge={
+                "axis": {"range": [0, 1]},
+                "bar": {"color": "red"}
+            },
+            delta={
+                "reference": metrics["mse_train"],
+                "increasing": {"color": "red"},
+                "decreasing": {"color": "green"}
+            },
             domain={'row': 0, 'column': 0}
-        ))
+        )
+    )
 
     fig_gauges.add_trace(
         go.Indicator(
             mode="gauge+number+delta",
             value=metrics["rmse_test"],
-            title={"text": f"RMSE (test)"},
-            gauge={"axis": {"range": [0, 1]}},
-            delta={"reference": metrics["rmse_train"]},
+            title={"text": "RMSE (test)"},
+            gauge={
+                "axis": {"range": [0, 1]},
+                "bar": {"color": "red"}
+            },
+            delta={
+                "reference": metrics["rmse_train"],
+                "increasing": {"color": "red"},
+                "decreasing": {"color": "green"}
+            },
             domain={'row': 0, 'column': 1}
         )
     )
 
     fig_gauges.update_layout(
         autosize=True,
-        height = 300,
+        height=300,
         grid={'rows': 1, 'columns': 2, 'pattern': "independent"},
         template={'data': {'indicator': [{'title': {'text': "Gauge Indicator"}}]}},
         title={'text': 'Error Evaluation', 'x': 0.5, 'y': 0.95, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 20}}

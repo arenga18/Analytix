@@ -67,8 +67,8 @@ def body(
 
     with col2:
         result_header_placeholder = st.empty()
-        metric_placeholder = st.empty()
         result_placeholder = st.empty()
+        metric_placeholder = st.empty()
 
     x_train, x_test = add_polynomial_features(x_train, x_test, degree)
 

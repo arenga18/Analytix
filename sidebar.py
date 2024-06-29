@@ -9,10 +9,10 @@ sidebar = {
     ],
     'label': [
         'Home',
-        'EDA',
-        'Cleaning',
-        'Normalization',
-        'Plot',
+        'EDA Automation',
+        'Data Cleaning',
+        'Data Normalization',
+        'Scatter Plot',
         'ML'
     ],
     'icon': [
@@ -22,7 +22,6 @@ sidebar = {
         '⚖️',
         '🪢',
         '🖥️'
-        
     ]
         
 }
