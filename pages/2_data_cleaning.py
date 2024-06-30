@@ -20,6 +20,7 @@ if os.path.exists(file_path):
 
     # Judul aplikasi
     st.title("Data Cleaning")
+    st.write("*Data cleaning is to prepare and correct data by removing or correcting errors, inconsistencies, and inaccuracies. This process involves removing duplicate data and handling missing data to ensure the dataset is accurate, complete, and ready for analysis.*")
     st.write("-----")
 
     # Membagi halaman menjadi dua kolom

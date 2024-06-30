@@ -15,6 +15,7 @@ for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sideba
 # Fungsi untuk melakukan label encoding pada seluruh dataset
 def encode_dataset(df):
     st.title("Encode Dataset")
+    st.write("*Encoding data in machine learning is the process of transforming raw data, such as text , string, or categories, into a numerical format that can be understood and processed by machine learning algorithms.*")
     st.write("-----")
 
     # Memeriksa kolom yang memiliki nilai string
@@ -26,7 +27,7 @@ def encode_dataset(df):
         string_columns_df = df[string_columns]
         st.dataframe(string_columns_df)
 
-        if st.button("Encode"):
+        if st.button("Encode Data"):
             # Inisialisasi LabelEncoder
             encoder = LabelEncoder()
             # Loop melalui semua kolom dengan tipe data object (string)
@@ -38,9 +39,6 @@ def encode_dataset(df):
 
             # Refresh page
             st.experimental_rerun()
-
-        st.subheader("DataFrame after Encoding")
-        st.write(df)
     else:
         st.warning("No columns with string values found. No encoding necessary.")
         st.write(df)
