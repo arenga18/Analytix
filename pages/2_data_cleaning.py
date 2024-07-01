@@ -5,7 +5,7 @@ from sidebar import sidebar
 import os
 
 st.set_page_config(
-    page_title="AnalyTIX",
+    page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
 
@@ -64,13 +64,13 @@ if os.path.exists(file_path):
         st.write(null_data)
 
         if not null_data.empty:
-            if st.button("Delete Null Data"):
+            if st.button("Delete Missing Data"):
                 df = df.dropna()
                 df.to_csv(file_path, index=False)  # Menyimpan kembali ke file CSV
-                st.write("Null data was removed.")
+                st.write("Missing data was removed.")
                 st.experimental_rerun()
         else:
-            st.write("No null data found.")
+            st.write("No Missing data found.")
 
     # Menampilkan dataframe
     st.write("\n")

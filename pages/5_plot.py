@@ -6,7 +6,7 @@ import plotly.express as px
 import os
 
 st.set_page_config(
-    page_title="AnalyTIX",
+    page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
 
