@@ -33,7 +33,7 @@ sidebar = {
 
 
 st.markdown("""
-            #GithubIcon {
+            .st-emotion-cache-q16mip {
                 visibility: hidden;
             }
             """)
