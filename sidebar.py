@@ -1,3 +1,5 @@
+import streamlit as st
+
 sidebar = {
     'page_link': [
         'App.py',
@@ -28,4 +30,13 @@ sidebar = {
     ]
         
 }
+
+
+st.markdown("""
+            #GithubIcon {
+                visibility: hidden;
+            }
+            """)
+
+
 
