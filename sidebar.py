@@ -33,8 +33,9 @@ sidebar = {
 
 
 st.markdown("""
-            .st-emotion-cache-q16mip {
-                visibility: hidden;
+            .st-emotion-cache-mnu3yk ef3psqc5, 
+            .st-emotion-cache-mnu3yk ef3psqc5 {
+                display: none !important;
             }
             """)
 
