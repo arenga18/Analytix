@@ -5,7 +5,7 @@ from streamlit_login_auth_ui.widgets import __login__
 from sidebar import sidebar
 
 st.set_page_config(
-    page_title="AnalyTIX",
+    page_title="AnalytiX",
     page_icon="images/logo.png"
 )
 

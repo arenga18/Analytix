@@ -46,7 +46,7 @@ def generate_data(dataset, n_samples, train_split, test_split, train_noise, test
         scaler = StandardScaler()
         x_train = scaler.fit_transform(x_train)
         x_test = scaler.transform(x_test)
-    elif dataset == "custom":
+    elif dataset == "uploaded dataset":
         file_path = 'dataset.csv'
         if os.path.exists(file_path):
             df = pd.read_csv(file_path)

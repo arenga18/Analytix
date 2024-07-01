@@ -38,19 +38,26 @@ def dataset_selector():
     dataset_container = st.sidebar.expander("Configure a dataset", True)
     with dataset_container: 
         
-        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","custom"))
+        dataset = st.selectbox("Choose a dataset", ("moons", "circles", "blobs","uploaded dataset"))
         
-        if dataset == "custom":
+        if dataset == "uploaded dataset":
             file_path = 'dataset.csv'
             if os.path.exists(file_path):
                 df = pd.read_csv(file_path)
                 column_names = df.columns.tolist()
 
+                # Pilihan fitur oleh pengguna
                 select_features = st.multiselect(
                     "Select Features (X variables)",
                     column_names[:-1],
                     default=column_names[:2]
                 )
+
+                if len(select_features) == 0:
+                    st.error("Please select at least one feature.")
+                else:
+                    st.success(f"You have selected {len(select_features)} features.")
+                    
 
                 selected_label = st.selectbox(
                     "Select Target (Y variable)",
@@ -86,7 +93,7 @@ def dataset_selector():
             select_features = None
             selected_label = None
         
-        if(dataset != "custom"):
+        if(dataset != "uploaded dataset"):
             train_noise = st.slider(
                 "Set the noise (train data)",
                 min_value=0.01,
