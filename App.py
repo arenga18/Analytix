@@ -20,7 +20,7 @@ st.markdown("""
         .st-emotion-cache-13ln4jf{
             max-width: 55rem !important;
         }
-        .stActionButton .st-emotion-cache-mnu3yk .ef3psqc5{
+        .st-emotion-cache-mnu3yk{
             display: none !important;
         }
         #MainMenu {
