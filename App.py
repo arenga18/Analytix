@@ -3,11 +3,13 @@ import os
 import pandas as pd
 from streamlit_login_auth_ui.widgets import __login__
 from sidebar import sidebar
+from sidebar import remove_github_source
 
 st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png"
 )
+remove_github_source
 
 st.markdown("""
     <style>

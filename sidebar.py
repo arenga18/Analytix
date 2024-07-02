@@ -32,7 +32,7 @@ sidebar = {
 }
 
 
-st.markdown("""
+remove_github_source = st.markdown("""
             <style>
                 .st-emotion-cache-mnu3yk ef3psqc5, 
                 .st-emotion-cache-mnu3yk ef3psqc5 {

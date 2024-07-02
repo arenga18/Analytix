@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sidebar import sidebar
+from sidebar import remove_github_source
 import plotly.express as px
 import os
 
@@ -9,6 +10,7 @@ st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
+remove_github_source
 
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
