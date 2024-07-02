@@ -3,13 +3,11 @@ import os
 import pandas as pd
 from streamlit_login_auth_ui.widgets import __login__
 from sidebar import sidebar
-from sidebar import remove_github_source
 
 st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png"
 )
-remove_github_source
 
 st.markdown("""
     <style>
@@ -21,6 +19,10 @@ st.markdown("""
         }
         .st-emotion-cache-13ln4jf{
             max-width: 55rem !important;
+        }
+        .st-emotion-cache-mnu3yk ef3psqc5, 
+        .st-emotion-cache-mnu3yk ef3psqc5 {
+            display: none !important;
         }
     </style>
     """,

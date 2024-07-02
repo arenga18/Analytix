@@ -3,14 +3,22 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sidebar import sidebar
-from sidebar import remove_github_source
 import os
 
 st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
-remove_github_source
+
+st.markdown("""
+            <style>
+                .st-emotion-cache-mnu3yk ef3psqc5, 
+                .st-emotion-cache-mnu3yk ef3psqc5 {
+                    display: none !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True)
 
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)

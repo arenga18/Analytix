@@ -1,5 +1,4 @@
 import streamlit as st
-from sidebar import remove_github_source
 from utils.functions import (
     add_polynomial_features,
     gauge_indicator,
@@ -25,7 +24,16 @@ st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
-remove_github_source
+
+st.markdown("""
+            <style>
+                .st-emotion-cache-mnu3yk ef3psqc5, 
+                .st-emotion-cache-mnu3yk ef3psqc5 {
+                    display: none !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True)
 
 def sidebar_controllers():
     dataset, n_samples, train_split, test_split,train_noise, test_noise, n_classes, select_features, selected_label = dataset_selector()
