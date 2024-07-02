@@ -3,16 +3,23 @@ import pandas as pd
 from ydata_profiling import ProfileReport
 from streamlit_ydata_profiling import st_profile_report
 from sidebar import sidebar
-from sidebar import remove_github_source
 import os
 
 st.set_page_config(
     page_title="AnalytiX",
     page_icon="images/logo.png", layout="wide"
 )
-remove_github_source
 
-remove_github_source
+st.markdown("""
+            <style>
+                .st-emotion-cache-mnu3yk ef3psqc5, 
+                .st-emotion-cache-mnu3yk ef3psqc5 {
+                    display: none !important;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True)
+
 
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
