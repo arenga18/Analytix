@@ -30,7 +30,7 @@ st.markdown("""
             visibility: hidden;
         }
         .st-emotion-cache-q16mip{
-            background:red !important
+            background:red !important;
             display: none !important;
         }
     </style>
