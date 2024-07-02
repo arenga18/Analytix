@@ -23,6 +23,12 @@ st.markdown("""
         .stActionButton .st-emotion-cache-mnu3yk ef3psqc5{
             display: none !important;
         }
+        #MainMenu {
+            visibility: hidden;
+        }
+        #GithubIcon {
+            visibility: hidden;
+        }
     </style>
     """,
     unsafe_allow_html=True
