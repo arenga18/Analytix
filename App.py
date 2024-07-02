@@ -29,7 +29,8 @@ st.markdown("""
         #GithubIcon {
             visibility: hidden;
         }
-        .st-emotion-cache-q16mip .e3g6aar1{
+        .st-emotion-cache-q16mip{
+            background:red !important
             display: none !important;
         }
     </style>
