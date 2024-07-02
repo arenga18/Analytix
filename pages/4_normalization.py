@@ -10,19 +10,22 @@ st.set_page_config(
     page_icon="images/logo.png", layout="wide"
 )
 
-st.markdown("""
-            <style>
-                .st-emotion-cache-mnu3yk ef3psqc5, 
-                .st-emotion-cache-mnu3yk ef3psqc5 {
-                    display: none !important;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True)
-
 for page_link, label, icon in zip(sidebar['page_link'], sidebar['label'], sidebar['icon']):
         st.sidebar.page_link(page_link, label=label, icon=icon)
 
+st.markdown("""
+    <style>
+        .st-emotion-cache-mnu3yk{
+            display: none !important;
+        }
+        .st-emotion-cache-q16mip{
+            background:red !important;
+            display: none !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Membaca dataset
 file_path = 'dataset.csv'
 
