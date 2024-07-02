@@ -1,5 +1,3 @@
-import streamlit as st
-
 sidebar = {
     'page_link': [
         'App.py',
@@ -30,17 +28,6 @@ sidebar = {
     ]
         
 }
-
-
-remove_github_source = st.markdown("""
-            <style>
-                .st-emotion-cache-mnu3yk ef3psqc5, 
-                .st-emotion-cache-mnu3yk ef3psqc5 {
-                    display: none !important;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True)
 
 
 
