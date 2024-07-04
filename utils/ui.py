@@ -24,7 +24,7 @@ def introduction():
         """
     - 🗂️ Choose a dataset
     - ⚙️ Pick a model and set its hyper-parameters
-    - 📉 Train it and check its confusion matrix and other metrics result
+    - 📉 Train it and check confusion matrix and other metrics result
     - 🩺 Diagnose possible overitting and experiment with other settings
     -----
     """
