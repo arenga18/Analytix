@@ -192,7 +192,7 @@ def plot_decision_boundary_and_metrics(
     fig.add_trace(heatmap, row=1, col=1,).add_trace(train_data).add_trace(
         test_data
     ).update_xaxes(range=[x_min, x_max], title="x1").update_yaxes(
-        range=[y_min, y_max], title="x2"
+        range=[y_min, y_max], title="x3"
     )
 
     fig.add_trace(
