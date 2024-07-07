@@ -176,7 +176,7 @@ def plot_decision_boundary_and_metrics(
     test_data = go.Scatter(
         x=x_test[:, 0],
         y=x_test[:, 1],
-        name="test data",
+        name="test_data",
         mode="markers",
         showlegend=True,
         marker_symbol="cross",
