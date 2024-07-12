@@ -4,7 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 def knn_param_selector():
 
-    n_neighbors = st.number_input("K_neighbors", 3, 20, 5, 1)
+    n_neighbors = st.number_input("K_neighbors", 2, 20, 5, 1)
     metric = st.selectbox(
         "metric", ("minkowski", "euclidean", "manhattan", "chebyshev", "mahalanobis")
     )
