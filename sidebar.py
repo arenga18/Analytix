@@ -15,7 +15,7 @@ sidebar = {
         'Data Encoding',
         'Data Normalization',
         'Scatter Plot',
-        'ML'
+        'Machine Learning'
     ],
     'icon': [
         '🏡',
