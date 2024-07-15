@@ -88,7 +88,7 @@ def body(
 
     # Render Metric Result
     (
-        model, train_accuracy, train_f1, precision_train, recall_train, mse_train, rmse_train,test_accuracy, test_f1, precision_test, recall_test, mse_test, rmse_test, duration
+        model, train_accuracy, train_f1, precision_train, recall_train, mse_train, cross_entropy_loss_train,test_accuracy, test_f1, precision_test, recall_test, mse_test,cross_entropy_loss_test, duration
     ) = train_model(model, x_train, y_train, x_test, y_test)
 
     # Make object of metric
@@ -98,13 +98,13 @@ def body(
         "precision_train": precision_train,
         "recall_train": recall_train,
         "mse_train": mse_train,
-        "rmse_train": rmse_train,
+        "cross_entropy_loss_train": cross_entropy_loss_train,
         "test_accuracy": test_accuracy,
         "test_f1": test_f1,
         "precision_test": precision_test,
         "recall_test": recall_test,
         "mse_test": mse_test,
-        "rmse_test": rmse_test
+        "cross_entropy_loss_test": cross_entropy_loss_test
     }
     
     # Decision Boundary Placeholder
