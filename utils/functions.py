@@ -9,7 +9,7 @@ import numpy as np
 import plotly.graph_objs as go
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, roc_curve, auc, precision_recall_curve, average_precision_score,ConfusionMatrixDisplay, mean_squared_error
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_curve, precision_recall_curve, roc_curve, auc, precision_recall_curve, average_precision_score,ConfusionMatrixDisplay, mean_squared_error, log_loss
 from sklearn.datasets import make_moons, make_circles, make_blobs
 from matplotlib.colors import LinearSegmentedColormap
 from sklearn.preprocessing import StandardScaler 
@@ -292,14 +292,14 @@ def gauge_indicator(metrics):
     fig_gauges.add_trace(
         go.Indicator(
             mode="gauge+number+delta",
-            value=metrics["rmse_test"],
-            title={"text": "RMSE (test)"},
+            value=metrics["cross_entropy_loss_test"],
+            title={"text": "Cross Entropy Loss (test)"},
             gauge={
                 "axis": {"range": [0, 1]},
                 "bar": {"color": "red"}
             },
             delta={
-                "reference": metrics["rmse_train"],
+                "reference": metrics["cross_entropy_loss_train"],
                 "increasing": {"color": "red"},
                 "decreasing": {"color": "green"}
             },
@@ -408,6 +408,10 @@ def train_model(model, x_train, y_train, x_test, y_test):
     duration = time.time() - t0
     y_train_pred = model.predict(x_train)
     y_test_pred = model.predict(x_test)
+    
+    # Calculate probabilities for cross-entropy loss
+    y_train_pred_proba = model.predict_proba(x_train)
+    y_test_pred_proba = model.predict_proba(x_test)
 
     # Train Result
     train_accuracy = np.round(accuracy_score(y_train, y_train_pred), 3)
@@ -415,9 +419,10 @@ def train_model(model, x_train, y_train, x_test, y_test):
     precision_train = np.round(precision_score(y_train, y_train_pred, average='weighted'), 3)
     recall_train = np.round(recall_score(y_train, y_train_pred, average='weighted'), 3)
     
-    # Train MSE and RMSE
+    # Train Cross-Entropy Loss
+    cross_entropy_loss_train = log_loss(y_train, y_train_pred_proba)
+    # Train MSE
     mse_train = mean_squared_error(y_train, y_train_pred)
-    rmse_train = np.sqrt(mse_train)
 
     # Test Result
     test_accuracy = np.round(accuracy_score(y_test, y_test_pred), 3)
@@ -425,11 +430,12 @@ def train_model(model, x_train, y_train, x_test, y_test):
     precision_test = np.round(precision_score(y_test, y_test_pred, average='weighted'), 3)
     recall_test = np.round(recall_score(y_test, y_test_pred, average='weighted'), 3)
 
-    # Test MSE and RMSE
+    # Test Cross-Entropy Loss
+    cross_entropy_loss_test = log_loss(y_test, y_test_pred_proba)
+    # Test MSE
     mse_test = mean_squared_error(y_test, y_test_pred)
-    rmse_test = np.sqrt(mse_test)
 
-    return (model, train_accuracy, train_f1, precision_train, recall_train, mse_train, rmse_train,test_accuracy, test_f1, precision_test, recall_test, mse_test, rmse_test, duration)
+    return (model, train_accuracy, train_f1, precision_train, recall_train, mse_train, cross_entropy_loss_train,test_accuracy, test_f1, precision_test, recall_test, mse_test,cross_entropy_loss_test, duration)
 
 
 def img_to_bytes(img_path):

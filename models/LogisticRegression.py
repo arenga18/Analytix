@@ -10,10 +10,10 @@ def lr_param_selector():
     )
 
     if solver in ["newton-cg", "lbfgs", "sag"]:
-        penalties = ["l2", "none"]
+        penalties = ["l2"]
 
     elif solver == "saga":
-        penalties = ["l1", "l2", "none", "elasticnet"]
+        penalties = ["l1", "l2", "elasticnet"]
 
     elif solver == "liblinear":
         penalties = ["l1"]
