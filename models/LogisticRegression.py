@@ -13,7 +13,7 @@ def lr_param_selector():
         penalties = ["l2"]
 
     elif solver == "saga":
-        penalties = ["l1", "l2", "elasticnet"]
+        penalties = ["l1", "l2"]
 
     elif solver == "liblinear":
         penalties = ["l1"]
