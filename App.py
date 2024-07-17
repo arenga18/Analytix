@@ -23,9 +23,6 @@ st.markdown("""
         .st-emotion-cache-mnu3yk{
             display: none !important;
         }
-        #MainMenu {
-            visibility: hidden;
-        }
         #GithubIcon {
             visibility: hidden;
         }
