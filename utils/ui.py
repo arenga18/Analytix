@@ -66,7 +66,7 @@ def dataset_selector():
                 )
 
                 train_split = st.slider(
-                "Set(train data)",
+                "Set ( Train data )",
                 min_value=0.1,
                 max_value=0.9,
                 step=0.1,
@@ -76,7 +76,7 @@ def dataset_selector():
                 default_test_split = 1.0 - train_split
             
                 test_split = st.slider(
-                    "Set(test data)",
+                    "Set ( Test data )",
                     min_value=0.1,
                     max_value=0.9,
                     step=0.1,
