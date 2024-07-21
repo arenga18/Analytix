@@ -41,7 +41,7 @@ if os.path.exists(file_path):
     df = pd.read_csv(file_path)
 
     st.title("Normalization Data")
-    st.write("*Normalization of data is the process of scaling feature values in a dataset to ensure they have comparable ranges.*")
+    st.write("*Normalization data is the process of scaling feature values in a dataset to ensure they have comparable ranges.*")
     st.write("-----")
 
     st.subheader("Normalization Options")
