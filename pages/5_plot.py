@@ -44,7 +44,7 @@ if os.path.exists(file_path):
         st.write(f"")    
         st.write(f"")    
         # Scatter plot selection
-        x_axis = st.selectbox("Select X-axis", options=df.columns)
+        x_axis = st.selectbox("Select axis", options=df.columns)
         y_axis = st.selectbox("Select Y-axis", options=df.columns)
 
     with col2: 
