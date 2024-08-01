@@ -35,7 +35,7 @@ if os.path.exists(file_path):
 
     # App title
     st.title("Scatter Plot Visualization")
-    st.write("*Scatter plot visualization is to display the relationship between two numerical variables by plotting data points on a two-dimensional graph. It helps identify patterns, correlations within the dataset.*")
+    st.write("*Scatter plot visualization is to display the relationship between two numerical variables by plotting data points on a two-dimensional graph. It helps identify patterns, and correlations.*")
     st.write("------")
 
     col1, col2 = st.columns((1, 3), gap="large")
