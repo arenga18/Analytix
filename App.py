@@ -100,7 +100,7 @@ if LOGGED_IN == True:
         if st.button("Delete Dataset"):
             os.remove('dataset.csv')
             st.info("Dataset has been deleted.")
-            st.experimental_rerun()
+            st.rerun()
     else:
         df = pd.DataFrame()
    

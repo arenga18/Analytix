@@ -52,7 +52,7 @@ def encode_dataset(df):
             df.to_csv(file_path, index=False)
 
             # Refresh page
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.warning("No columns with string values found. No encoding necessary.")
         st.write(df)
