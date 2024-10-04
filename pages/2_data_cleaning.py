@@ -56,7 +56,7 @@ if os.path.exists(file_path):
                 df = df.drop_duplicates()
                 df.to_csv(file_path, index=False)  # Menyimpan kembali ke file CSV
                 st.write("Duplicate data was removed.")
-                st.experimental_rerun()
+                st.rerun()
         else:
             st.write("No duplicate data found.")
 
@@ -82,7 +82,7 @@ if os.path.exists(file_path):
                 df = df.dropna()
                 df.to_csv(file_path, index=False)  # Menyimpan kembali ke file CSV
                 st.write("Missing data was removed.")
-                st.experimental_rerun()
+                st.rerun()
         else:
             st.write("No Missing data found.")
 

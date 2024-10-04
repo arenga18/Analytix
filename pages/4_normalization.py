@@ -64,7 +64,7 @@ if os.path.exists(file_path):
         df.to_csv(file_path, index=False)
 
         # Refresh page
-        st.experimental_rerun()
+        st.rerun()
 
     st.subheader("DataFrame after Normalization")
     st.write(df)
